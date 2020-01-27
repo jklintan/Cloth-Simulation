@@ -11,9 +11,8 @@ n = numel(t);               %Antalet tidssamples
 m = 1/size;                 %Partikelmasssa
 K = 2000;                   %Fjäderkonstant
  
-%z = peaks(25);             %Test-yta som är fixed (Bra för att prova mesh-funktionen)
+%z = peaks(25);             %Testyta som är fixed ()
  
-
 figure;                     %Öppna figuren
 for i = 1:n
     plane = forcefield(i,plane,K,m);
