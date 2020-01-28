@@ -1,14 +1,12 @@
-function [forces] = force(PLANE,t)
-%FORCE Summary of this function goes here
-%   Detailed explanation goes here
-
-x = point.x;
-y = point.y;
-z = point.z;
+function [newPositions] = force(step,plane,K,m)
+%   Beräknar nya positioner [newPositions] för alla punkter, samt lagrar en iteration
+%   bakåt av geometrin. Beräknas med Verletintegration.
 
 
 
-f = K*(euc_length-)
+
+
+
 
 end
 

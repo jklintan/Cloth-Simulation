@@ -15,10 +15,12 @@ K = 2000;                   %Fjäderkonstant
  
 
 figure;                     %Öppna figuren
-for i = 1:n
-    plane = forcefield(i,plane,K,m);
+
+for step = 2:n
+    plane = forcefield(step,plane,K,m);
     mesh(plane);
     zlim([-8 8]);
     drawnow;
-    %pause(0.001);
+    pause(0.001);
 end
+
