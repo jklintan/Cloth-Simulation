@@ -8,7 +8,7 @@ z = point.z;
 
 euc_length = sqrt((x^2)+(y^2)+(z^2));
 
-f = K*(euc_length-)
+f = K*(euc_length);
 
 end
 

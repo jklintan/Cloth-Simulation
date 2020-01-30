@@ -1,25 +1,40 @@
-function [x,t] = Euler_implicit(m, kd, ks, n, tf, v0, x0, t0)
+function [y] = Euler_implicit(m, t_in, v1, v2, kd, ks, yt, h)
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
+
+y = zeros(size(yt));
+
 ag = -9.81;
-h = tf/n; %Time step
 
 %Pre-allocate arrays
-x = zeros(1, n+1);
-t = zeros(1, n+1);
-v = zeros(1, n+1);
-
-v(1) = v0;
-x(1) = x0;
-t(1) = t0;
+x = zeros(1, 2);
+t = zeros(1, 2);
+v = zeros(1, 2);
 
 %Time integration using Euler's method
-for i = 1:n
-    t(i+1) = t(i) + h;
-    Fk = (ag -ks*x(i)-kd*v(i))*m; % F = ma 
-    v(i+1) = v(i) + h*(Fk/m);
-    x(i+1) = x(i) + v(i+1)*h;
+for i = 1:size(y(:,1))
+    
+    for j = 1:size(y(1,:))
+        
+        if(i == 1)
+            x(2) = 0;
+        
+        else
+                
+        v(1) = 1;
+        x(1) = yt(i,j);
+        t(1) = t_in;
+        
+        t(2) = t(1) + h;
+        F = m*ag -ks*(y(i-1, j))-kd*v(1);
+        v(2) = v(1) + h*(F)/m;
+        x(2) = x(1) + v(2)*h;
+
+        end
+        
+        
+        y(i,j) = x(2);
+
+    end
     
 end
-end
-
