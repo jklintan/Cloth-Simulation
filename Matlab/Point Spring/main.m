@@ -1,7 +1,7 @@
 clear;
 clc;
 
-plane_size = 10;                  %Storleken på planet som ska skapas
+plane_size = [10,10];                  %Storleken på planet som ska skapas
 z = peaks(plane_size);            %Test-yta som är fixed (Bra för att prova mesh-funktionen)
 
 length = 1;                       %Simulationstid i sekunder
@@ -13,8 +13,8 @@ m = 1/plane_size;                 %Partikelmasssa
 K = 2000;                         %Fjäderkonstant
 plane = point.empty;              %Skapa ett plan
 
-for i = 1:plane_size
-    for j = 1:plane_size
+for i = 1:plane_size(1)
+    for j = 1:plane_size(2)
         plane(i,j).x = i;
         plane(i,j).y = j;
         plane(i,j).z = z(i,j);

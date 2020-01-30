@@ -1,8 +1,8 @@
-function [outputArg1,outputArg2] = applyForceKernel(inputArg1,inputArg2)
+function [f] = applyForceKernel(plane,i,j)
 %APPLYFORCEKERNEL Summary of this function goes here
 %   Detailed explanation goes here
 
-
+    
 
 
 end
