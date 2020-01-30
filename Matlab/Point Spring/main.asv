@@ -9,9 +9,9 @@ dt = 0.01;                        %Tidsteg i sekunder
 %dt = 0.1;
 t = 0:dt/length:length;           %Tidssamples
 n = numel(t);                     %Antalet tidssamples
-m = 1/plane_size;                 %Partikelmasssa
-K = 2000;                         %Fjäderkonstant
-plane = point.empty;              %Skapa ett plan
+m = 1/plane_size;                  %Partikelmasssa
+K = 2000;                   %Fjäderkonstant
+plane = point.empty;        %Skapa ett plan
 
 for i = 1:plane_size
     for j = 1:plane_size
@@ -22,7 +22,7 @@ for i = 1:plane_size
 end
 
 
-figure;                           %Öppna figuren
+figure;                     %Öppna figuren
 
 %SIMULERA OCH RENDERA CLOTHEN
 for step = 2:n

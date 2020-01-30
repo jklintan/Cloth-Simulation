@@ -9,15 +9,14 @@ newPositions = plane;
 
 
 
-    for i = 1:sX
-        for j = 1:sY
-            newPositions(i,j).x = newPositions(i,j).x;
-            newPositions(i,j).y = newPositions(i,j).y;
-            newPositions(i,j).z = newPositions(i,j).z;
+for i = 1:sX
+    for j = 1:sY
+        newPositions(i,j).x = newPositions(i,j).x;
+        newPositions(i,j).y = newPositions(i,j).y;
+        newPositions(i,j).z = newPositions(i,j).z;
         end
     end
-
-    
     
 
 end
+
