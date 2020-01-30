@@ -21,6 +21,9 @@ counterY = 1;
 for i = 2:paddedSize(1)-1
     counterY = 1;
     for j = 2:paddedSize(2)-1
+        
+        
+        
         paddedPlane(i,j).x = plane(counterX,counterY).x;
         paddedPlane(i,j).y = plane(counterX,counterY).y;
         paddedPlane(i,j).z = plane(counterX,counterY).z;
