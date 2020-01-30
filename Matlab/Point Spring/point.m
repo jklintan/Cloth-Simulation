@@ -6,6 +6,7 @@ classdef point
         x;
         y;
         z;
+        prevPoint;
     end
     
     methods
@@ -16,6 +17,7 @@ classdef point
             obj.x = inputArg1;
             obj.y = inputArg2;
             obj.z = inputArg3;
+            obj.prevPoint = 0;
             end
             
         end
