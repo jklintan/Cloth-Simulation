@@ -1,7 +1,6 @@
 function [paddedPlane] = padPlane(plane)
 
-pS = size(plane);
-paddedSize = pS+2;
+paddedSize = size(plane)+2;
 
 
 paddedPlane = point.empty;              %Skapa ett plan
@@ -20,7 +19,6 @@ counterY = 1;
 
 
 for i = 2:paddedSize(1)-1
-    counterX = counterX+1;
     counterY = 1;
     for j = 2:paddedSize(2)-1
         paddedPlane(i,j).x = plane(counterX,counterY).x;
@@ -28,6 +26,7 @@ for i = 2:paddedSize(1)-1
         paddedPlane(i,j).z = plane(counterX,counterY).z;
         counterY = counterY+1;
     end
+    counterX = counterX+1;
     
 end
 
