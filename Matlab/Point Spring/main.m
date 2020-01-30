@@ -20,26 +20,41 @@ cloth(row, col, timestep);
 %% Cloth function
 
 function cloth(row, col, timestep)
+% 
+%     Properties
+%     Number of particles
+%       m = 0.1; %Mass of particles
+%     Stiffness N/m
+%     Damping Ns/m
+%     ks %Spring constant value
+%     kd %Damper constant value
+    
+v1= [0, 1];
+v2= [1 , 0];
+[x,y] = meshgrid(0:10,0:5);
+xy = [x(:),y(:)];
+T = [v1;v2];
+xyt = xy*T;
+xt = reshape(xyt(:,1),size(x));
+yt = reshape(xyt(:,2),size(y));
+plot(xt,yt,'r-')
+hold on
+plot(xt',yt','r-')
+axis equal
+axis square
 
-    %Properties
-    % Number of particles
-      m = 0.1; %Mass of particles
-    % Stiffness N/m
-    % Damping Ns/m
-    % ks %Spring constant value
-    % kd %Damper constant value
 
-    figure; 
-    particles = particlesystem(row, col, 0);
-    for c = 1:col
-        for r = 1:row
-            xlim([0 row+1]);
-            ylim([0 col+1]);
-            %particles.particles = particles.particles + particle(r,c,m, false);
-            plot(r, c, 'r*-', 'LineWidth', 2);
-            hold on;
-        end
-    end
+for t = 1:100
+    clf;
+    yt = yt - 0.01*t; %update position for masses
+    plot(xt,yt,'bo-');
+    hold on;
+    plot(xt', yt', 'r-');
+    xlim([-5 10]);
+    ylim([-10 10]);
+    drawnow;
+end
+
 
 end
 
