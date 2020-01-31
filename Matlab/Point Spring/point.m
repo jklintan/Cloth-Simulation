@@ -6,7 +6,9 @@ classdef point
         x;
         y;
         z;
-        prevPoint;
+
+        prevVel;
+        ifPad;
     end
     
     methods
@@ -16,8 +18,10 @@ classdef point
             if nargin > 0
             obj.x = inputArg1;
             obj.y = inputArg2;
-            obj.z = inputArg3;
-            obj.prevPoint = 0;
+            obj.z = inputArg3; 
+            
+            obj.prevVel = 0;
+            obj.ifPad = false;
             end
             
         end
