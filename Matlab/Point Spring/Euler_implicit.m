@@ -17,7 +17,7 @@ for i = 1:size(y(:,1))
     for j = 1:size(y(1,:))
         
         if(i == 1)
-            x(2) = 0;
+            F = 0;
         
         else
                 
@@ -26,7 +26,7 @@ for i = 1:size(y(:,1))
         t(1) = t_in;
         
         t(2) = t(1) + h;
-        F = m*ag -ks*(y(i-1, j))-kd*v(1);
+        F = m*ag -ks*(1-(y(i-1, j)-yt(i-1,j))-kd*v(1);
         v(2) = v(1) + h*(F)/m;
         x(2) = x(1) + v(2)*h;
 
