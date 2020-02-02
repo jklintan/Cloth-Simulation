@@ -6,7 +6,7 @@ plane_size = [10,10];                %Storleken på planet som ska skapas
 z = peaks(plane_size(1));            %Test-yta som är fixed (Bra för att prova mesh-funktionen)
 
 length = 1;                       %Simulationstid i sekunder
-dt = 0.001;                        %Tidsteg i sekunder
+dt = 0.01;                        %Tidsteg i sekunder
 %dt = 0.1;
 t = 0:dt/length:length;           %Tidssamples
 n = numel(t);                     %Antalet tidssamples
@@ -28,7 +28,7 @@ figure;                           %Öppna figuren
 
 %SIMULERA OCH RENDERA CLOTHEN
 for step = 2:n
-    plane = forcefield(t,step,plane,ks,kd,m);
+    plane = forcefield(t,step,plane,ks,kd,R,m);
     [X,Y,Z] = bindGrid(plane,plane_size);
     mesh(X,Y,Z);
     xlim([0 plane_size(1)]);
@@ -37,5 +37,4 @@ for step = 2:n
     drawnow;
     %pause(0.01);
 end
-
 
