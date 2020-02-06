@@ -1,0 +1,42 @@
+﻿  main.cpp
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(116): warning C4244: '=': conversion from 'GLint' to 'GLfloat', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(137): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(142): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(143): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(190): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(191): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(300): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(301): warning C4244: 'argument': conversion from 'GLfloat' to 'GLint', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(40): warning C4101: 'modelview': unreferenced local variable
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(46): warning C4101: 'myKeyRotator': unreferenced local variable
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\main.cpp(47): warning C4101: 'myMouseRotator': unreferenced local variable
+  MatrixStack.cpp
+  Rotator.cpp
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(18): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(19): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(23): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(25): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(29): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(30): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(34): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(35): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(68): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(69): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(70): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(71): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(72): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\rotator.cpp(73): warning C4305: '=': truncation from 'double' to 'float'
+  Texture.cpp
+  TriangleSoup.cpp
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\trianglesoup.cpp(331): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\trianglesoup.cpp(332): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\trianglesoup.cpp(335): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\josef\desktop\opengltest\openglvs - kopia (2)\openglvs\trianglesoup.cpp(336): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Utilities.cpp
+  Generating Code...
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+Texture.obj : warning LNK4049: locally defined symbol ___glewGenerateMipmap imported
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\josef\Desktop\Opengltest\OpenGLVS - kopia (2)\Debug\vc120.pdb'; linking object as if no debug info
+  OpenGLVS.vcxproj -> C:\Users\josef\Desktop\Opengltest\OpenGLVS - kopia (2)\Debug\OpenGLVS.exe
