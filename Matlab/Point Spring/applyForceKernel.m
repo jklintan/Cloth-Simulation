@@ -50,7 +50,8 @@ end
 mg = -m*9.81;
 
 
-added_f = f1+f2+f3+f4;
+%added_f = f1+f2+f3+f4;
+added_f = [0 0 0];
 added_f(3) = added_f(3) + mg;
 
 end

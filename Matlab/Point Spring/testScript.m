@@ -17,5 +17,5 @@ end
 new = padPlane(plane);
 newSize = size(new);
 
-forces = applyForceKernel(new,3,2,2000,2000,1.1,0.1)
+forces = applyForceKernel(new,2,2,100,10,1.0,0.1)
 

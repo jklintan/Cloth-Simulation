@@ -20,7 +20,7 @@ classdef point
             obj.y = inputArg2;
             obj.z = inputArg3; 
             
-            obj.prevVel = 0;
+            obj.prevVel = [0 0 0];
             obj.ifPad = false;
             end
             

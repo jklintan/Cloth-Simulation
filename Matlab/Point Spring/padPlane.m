@@ -29,6 +29,7 @@ for i = 2:paddedSize(1)-1
         paddedPlane(i,j).y = plane(counterX,counterY).y;
         paddedPlane(i,j).z = plane(counterX,counterY).z;
         paddedPlane(i,j).ifPad = false;
+        paddedPlane(i,j).prevVel = plane(counterX,counterY).prevVel;
         counterY = counterY+1;
     end
     counterX = counterX+1;
