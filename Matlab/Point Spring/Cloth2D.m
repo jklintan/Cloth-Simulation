@@ -22,14 +22,17 @@ close all; clc; clear all;
 S.f = figure;
 S.a = axes;
 S.h = plot(0, 0);
-S.mText = uicontrol('style','text');
+%S.mText = uicontrol('style','text');
 
 xlabel('meter');
 ylabel('meter');
 
 % Parameters, note that stiffness > damping > mass
 % Euler 40, 8, 0.1
-sim = 1; %1 = top row, 2 = one point, 3 = table
+sim = 3; %1 = top row, 2 = one point, 3 = table
+method = 2; %1 = Euler, 2 = Verlet
+
+
 row =10;
 col = 20;
 ts = 0.001;              % Seconds
@@ -46,10 +49,10 @@ end
 
 if(sim == 2)
     col = 8;
-    row = 10;
+    row = 8;
     stiffness = 80;           % N/m 
     damping = 12;            % Ns/m %For showcase, use damping 2 and show spring force
-    m = 0.1;
+    m = 0.08;
 end
 
 if(sim == 3)
@@ -130,7 +133,7 @@ xlim([canvas_min(1)-range(1) canvas_max(1)+range(1)])
 if(sim == 1)
     ylim([canvas_min(2)-range(2)*nodes.row canvas_max(2)])
 elseif(sim == 2)
-    ylim([-1.2 canvas_max(2)]) %For fixed middle
+    ylim([-1.5 canvas_max(2)]) %For fixed middle
 elseif(sim == 3)
     ylim([-0.4 0.4]) %For fixed square
 end
@@ -141,7 +144,7 @@ plotwindow = drawNodes(S, plot, nodes, 0);
 for i = 0 : timelim
 
     %Update the position of the nodes
-    nodes = updateNode(nodes, mass, stiffness, damping, ts);
+    nodes = updateNode(nodes, mass, stiffness, damping, ts, method);
     
     %Draw the nodes in the plot
     plotwindow = drawNodes(S, plotwindow, nodes, ts);
@@ -209,7 +212,7 @@ end
 
 %% Update the position of each node
 
-function nodes = updateNode(nodes, mass, stiffness, damping, ts)
+function nodes = updateNode(nodes, mass, stiffness, damping, ts, method)
 
     row = nodes.row;
     col = nodes.col;
@@ -333,12 +336,15 @@ function nodes = updateNode(nodes, mass, stiffness, damping, ts)
                 node(r,c).acc = node(r,c).force ./ mass;
                 
                 % Euler method for updating position and velocity
-                node(r,c).vel = Euler(node(r,c).vel, node(r,c).acc, ts);
-                node(r,c).pos = Euler(node(r,c).pos, node(r,c).vel, ts); 
-                
+                if(method == 1)
+                    node(r,c).vel = Euler(node(r,c).vel, node(r,c).acc, ts);
+                    node(r,c).pos = Euler(node(r,c).pos, node(r,c).vel, ts); 
+                else
                 % Verlet method for updating position and velocity
-                %[node(r,c).pos_old, node(r,c).pos, node(r,c).vel] = Verlet(node(r,c).pos, node(r,c).pos_old, node(r,c).acc, ts);
-            end               
+                [node(r,c).pos_old, node(r,c).pos, node(r,c).vel] = Verlet(node(r,c).pos, node(r,c).pos_old, node(r,c).acc, ts);
+            
+                end
+            end
         end
     end
     
