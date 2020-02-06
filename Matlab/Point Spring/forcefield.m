@@ -19,7 +19,7 @@ counterY = 1;
         
         for j = 2:paddedSize(2)-1
             
-            if i == 2
+            if (i == 2 && j == 2) || (i == 2 && j == paddedSize(2)-1) || (i == paddedSize(1)-1 && j == paddedSize(2)-1)
                 totPointForce = 0;
                 
             else

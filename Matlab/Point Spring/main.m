@@ -2,15 +2,15 @@ clear all;
 clc;
 close('all');
 
-plane_size = [10,10];                %Storleken på planet som ska skapas
-z = ones(plane_size(1));            %Test-yta som är fixed (Bra för att prova mesh-funktionen)
+plane_size = [10,10];             %Storleken på planet som ska skapas
+z = ones(plane_size(1));          %Test-yta som är fixed (Bra för att prova mesh-funktionen)
 
 length = 5;                       %Simulationstid i sekunder
-dt = 0.005;                        %Tidsteg i sekunder
+dt = 0.003;                       %Tidsteg i sekunder
 t = 0:dt/length:length;           %Tidssamples
 n = numel(t);                     %Antalet tidssamples
-m = 20/plane_size(1);              %Partikelmasssa
-ks = 2000;                         %Fjäderkonstant
+m = 20/plane_size(1);             %Partikelmasssa
+ks = 2000;                        %Fjäderkonstant
 kd = 8; 
 plane = point.empty;              %Skapa ett plan
 R = 1;
@@ -32,7 +32,7 @@ for step = 2:n
     mesh(X,Y,Z);
     xlim(perspective);
     ylim(perspective);
-    zlim(perspective);
+    zlim(perspective-5);
     drawnow;
     %pause(0.01);
 end
