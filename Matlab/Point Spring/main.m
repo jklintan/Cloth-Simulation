@@ -5,6 +5,9 @@
 %This program is a simulation of a cloth based on a
 %mass-spring-damper method.
 
+%Based on the code by Auralius Manurung
+%Copyright (c) 2016, All rights reserved.
+
 % Requires navigation toolbox and database toolbox for nodes
 
 %% Reset
@@ -126,7 +129,7 @@ end
 %% Update the position of each node
 
 function nodes = updateNode(nodes, mass, stiffness, damping, ts)
-% Update all nodes per time sampling
+
     row = nodes.row;
     col = nodes.col;
     node = nodes.node;
@@ -242,7 +245,7 @@ function nodes = updateNode(nodes, mass, stiffness, damping, ts)
         end
     end
 
-    % Position, velocity, and acceelleration update
+    % Position, velocity, and accelleration update
     for r = 1 : row        
         for c = 1: col
             if  node(r,c).isFixed ~= 1            
@@ -256,4 +259,14 @@ function nodes = updateNode(nodes, mass, stiffness, damping, ts)
     nodes.node = node;
 end
 
-%% 
+%% Euler function
+
+function xt1 = EulerUpdate(xt, ts)
+
+    
+
+end
+
+
+
+%% Verlet function
