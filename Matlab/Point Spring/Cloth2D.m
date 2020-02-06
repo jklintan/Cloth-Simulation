@@ -364,5 +364,5 @@ end
 function [xtLast, xtNext, vtNext] = Verlet(xt, xtPrev, xtPrimPrim, h)
     xtLast = xt;
     xtNext = 2*xt - xtPrev + h^2*xtPrimPrim;
-    vtNext = 1/(2*h) * (xt - xtPrev);
+    vtNext = 1/(2*h) * (xtNext - xt);
 end
