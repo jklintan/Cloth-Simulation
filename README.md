@@ -26,7 +26,12 @@ x'(t+1) = x'(t) + hx''(t)
 
 The acceleration is based on Newton's second law of motion with the force calculated as the sum of all forces acting on each particle.
 
-
+Since the Euler method for the cloth simulation requires a very small timestep to stay stable, the Verlet method is implemented as an alternate simulation method according to: 
+```
+x(t+1) = 2x(t) - x(t-1) + h*h*x''(t)
+x'(t+1) = 1/(2h)(x(t) - x(t-1)
+```
+This approach is an advantage since the position doesn't require the velocity to be calculated and it is also a more stable solution for the cloth simulation. This is the approach used for implementing the simulation in OpenGL. 
 
 ## Sources and attribution
 
