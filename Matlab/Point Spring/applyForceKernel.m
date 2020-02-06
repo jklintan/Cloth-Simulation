@@ -1,4 +1,4 @@
-function [added_f] = applyForceKernel(paddedPlane,y,x,ks,kd,R,m)
+function [added_f] = applyForceKernel(paddedPlane,x,y,ks,kd,R,m)
 %APPLYFORCEKERNEL Summary of this function goes here
 %   Detailed explanation goes here
     
@@ -9,7 +9,9 @@ if(paddedPlane(x,y+1).ifPad == false)
     
     vec1Length = norm(vec1);
     
-    f1 = ks*(vec1Length-R)*(vec1/vec1Length);
+    vel1 = paddedPlane(x,y+1).prevVel-paddedPlane(x,y).prevVel;
+   
+    f1 = ks*(vec1Length-R)*(vec1/vec1Length) + kd*vel1;
 else
     f1 = 0;
 end
@@ -19,7 +21,9 @@ if(paddedPlane(x+1,y).ifPad == false)
     
     vec2Length = norm(vec2);
     
-    f2 = ks*(vec2Length-R)*(vec2/vec2Length);
+    vel2 = paddedPlane(x+1,y).prevVel-paddedPlane(x,y).prevVel;
+    
+    f2 = ks*(vec2Length-R)*(vec2/vec2Length) + kd*vel2;
     
 else
     f2 = 0;
@@ -30,7 +34,9 @@ if(paddedPlane(x,y-1).ifPad == false)
     
     vec3Length = norm(vec3);
     
-    f3 = ks*(vec3Length-R)*(vec3/vec3Length);
+    vel3 = paddedPlane(x,y-1).prevVel-paddedPlane(x,y).prevVel;
+    
+    f3 = ks*(vec3Length-R)*(vec3/vec3Length) + kd*vel3;
     
 else
     f3 = 0;
@@ -41,7 +47,9 @@ if(paddedPlane(x-1,y).ifPad == false)
     
     vec4Length = norm(vec4);
     
-    f4 = ks*(vec4Length-R)*(vec4/vec4Length);
+    vel4 = paddedPlane(x-1,y).prevVel-paddedPlane(x,y).prevVel;
+    
+    f4 = ks*(vec4Length-R)*(vec4/vec4Length) + kd*vel4;
     
 else
     f4 = 0;
@@ -50,8 +58,8 @@ end
 mg = -m*9.81;
 
 
-%added_f = f1+f2+f3+f4;
-added_f = [0 0 0];
+added_f = f1+f2+f3+f4;
+%added_f = [0 0 0];
 added_f(3) = added_f(3) + mg;
 
 end
