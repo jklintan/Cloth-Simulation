@@ -6,11 +6,11 @@
 
 //Include GLEW
 #define GLEW_STATIC
-#include <GL/glew.h>
+#include <C:/Users/MeckBook/Documents/!TNM085/Cloth-Simulation/OpenGLVS - Template/External resources/GLEW/include/GL/glew.h>
 
 //Include GLFW, define for being able to use glad
 #define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
+#include <C:/Users/MeckBook/Documents/!TNM085/Cloth-Simulation/OpenGLVS - Template/External resources/GLFW/include/GLFW/glfw3.h>
 
 //Include header files
 #include "Shader.hpp"
