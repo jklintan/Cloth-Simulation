@@ -8,11 +8,11 @@
 %Based on the code by Auralius Manurung
 %Copyright (c) 2016, All rights reserved.
 
-% Requires navigation toolbox and database toolbox for nodes
+%Requires navigation toolbox and database toolbox
 
 %% Reset
 
-close all; clc; close all;
+close all; clc; clear all;
 
 %% Main simulation
 
@@ -25,38 +25,51 @@ xlabel('meter');
 ylabel('meter');
 
 % Parameters, note that stiffness > damping > mass
-row = 5;
+% Euler 40, 8, 0.1
+% Verlet (row, col = 10, 20) 40, 12, 0.1 = good with fixed top
+% Verlet (row, col = 10, 20) 100, 14, 0.2 = good with fixed middle
+row =10;
 col = 10;
 stiffness = 40;           % N/m
-damping =   8;            % Ns/m
+damping = 12;            % Ns/m
 mass = 0.1;              % Kg
-ts = 0.001;               % Seconds
-virtualSpringConst = 100;
-timelim = 10000
+ts = 0.001;              % Seconds
+timelim = 10000;
 
 % Build the nodes and the canvas
-nodes = buildNodes(row, col);
-plotwindow = createPlot(nodes);
-plotwindow = drawNodes(S, plotwindow, nodes, 0);
+nodes.row = row;
+nodes.col = col;
 
-% Main loop
-for i = 0 : timelim
-
-    %Update the position of the nodes
-    nodes = updateNode(nodes, mass, stiffness, damping, ts);
-    
-    %Do not update every timestep (for efficiency)
-    if mod(i, 10) == 0
-        plotwindow = drawNodes(S, plotwindow, nodes, ts);
-       
+for c = 1: col
+    for r = 1 : row
+        node(r,c).initalPos = [(c - 1) / 100 (r - 1) / 100 ]; % 1 cm step
+        node(r,c).pos = node(r,c).initalPos;
+        node(r,c).pos_old = node(r,c).pos;
+        node(r,c).acc = [0 0];
+        node(r,c).vel = [0 0];
+        node(r,c).force_ext = [0 0];
         
+        % Set middle as fixed
+        %if (r == floor(row/2) && c == floor(col/2))
+        %    node(r,c).isFixed = 1;
+        % Set top row as fixed
+        if (r == 1)
+            node(r,c).isFixed = 1;
+        % Set middle row as fixed
+        %if (r == floor(row/2))
+        %    node(r,c).isFixed = 1;
+        % Set top two corners as fixed
+        %if (r == 1 && c == 1 || (r == 1 && c == col) )
+        %   node(r,c).isFixed = 1;
+        else
+            node(r,c).isFixed = 0;
+        end
     end
 end
 
+nodes.node = node;
 
-%% Create plot window
-
-function plot = createPlot(nodes)
+% Create the plot window
 i = 1;
 for c = 1 : nodes.col
     for r = 1 : nodes.row
@@ -71,6 +84,22 @@ range = canvas_max - canvas_min;
 
 xlim([canvas_min(1)-range(1) canvas_max(1)+range(1)])
 ylim([canvas_min(2)-range(2)*nodes.row canvas_max(2)])
+%ylim([-0.8 canvas_max(2)]) %For fixed middle
+
+plotwindow = drawNodes(S, plot, nodes, 0);
+
+% Main loop
+for i = 0 : timelim
+
+    %Update the position of the nodes
+    nodes = updateNode(nodes, mass, stiffness, damping, ts);
+    
+    %Do not update every timestep (for efficiency)
+    if mod(i, 10) == 0
+        plotwindow = drawNodes(S, plotwindow, nodes, ts);
+       
+        
+    end
 end
 
 %% Draw the nodes
@@ -95,7 +124,6 @@ end
 
 set(S.h, 'XData', plot(:,1));
 set(S.h, 'YData', plot(:,2));
-set(S.mText,'String', timestep);
 
 drawnow;
 end
@@ -111,12 +139,20 @@ for c = 1: col
     for r = 1 : row
         node(r,c).initalPos = [(c - 1) / 100 (r - 1) / 100 ]; % 1 cm step
         node(r,c).pos = node(r,c).initalPos;
+        node(r,c).pos_old = node(r,c).pos;
         node(r,c).acc = [0 0];
         node(r,c).vel = [0 0];
         node(r,c).force_ext = [0 0];
         
+        % Set top row as fixed
         if (r == 1)
             node(r,c).isFixed = 1;
+        % Set middle row as fixed
+        %if (r == floor(row/2))
+        %    node(r,c).isFixed = 1;
+        % Set top two corners as fixed
+        %if (r == 1 && c == 1 || (r == 1 && c == col) )
+        %   node(r,c).isFixed = 1;
         else
             node(r,c).isFixed = 0;
         end
@@ -245,13 +281,18 @@ function nodes = updateNode(nodes, mass, stiffness, damping, ts)
         end
     end
 
-    % Position, velocity, and accelleration update
+    % Position, velocity, and accelleration update for all nodes
     for r = 1 : row        
         for c = 1: col
-            if  node(r,c).isFixed ~= 1            
+            if  node(r,c).isFixed ~= 1  % Upate all nodes except the fixed ones          
                 node(r,c).acc = node(r,c).force ./ mass;
-                node(r,c).vel = node(r,c).vel + node(r,c).acc .* ts;
-                node(r,c).pos = node(r,c).pos + node(r,c).vel .* ts;           
+                
+                % Euler method for updating position and velocity
+                node(r,c).vel = Euler(node(r,c).vel, node(r,c).acc, ts);
+                node(r,c).pos = Euler(node(r,c).pos, node(r,c).vel, ts); 
+                
+                % Verlet method for updating position and velocity
+                %[node(r,c).pos_old, node(r,c).pos, node(r,c).vel] = Verlet(node(r,c).pos, node(r,c).pos_old, node(r,c).acc, ts);
             end               
         end
     end
@@ -261,12 +302,16 @@ end
 
 %% Euler function
 
-function xt1 = EulerUpdate(xt, ts)
-
-    
-
+function xtNext = Euler(xt, xtPrim,h)
+    xtNext = xt + h*xtPrim;
 end
 
 
-
 %% Verlet function
+
+% Position and velocity update
+function [xtLast, xtNext, vtNext] = Verlet(xt, xtPrev, xtPrimPrim, h)
+    xtLast = xt;
+    xtNext = 2*xt - xtPrev + h^2*xtPrimPrim;
+    vtNext = 1/(2*h) * (xt - xtPrev);
+end
