@@ -5,17 +5,32 @@ class particle {
   PVector initialpos = new PVector(0.0, 0.0, 0.0);
   PVector vel = new PVector(0.0, 0.0, 0.0);
   PVector acc = new PVector(0.0, 0.0, 0.0);
-  PVector forces = new PVector(0.0, 0.0, 0.0);
+  PVector force = new PVector(0.0, 0.0, 0.0);
   boolean isfixed = false;
+  PVector index = new PVector(0.0, 0.0);
   
   //Constructor
-  particle(float x, float y){
-    this.pos.set(x, y, 0.0);
+  particle(int row, int col, int dist, boolean fix){
+    this.index.set(row, col);
+    this.initialpos.set((row-1)*dist, (col-1)*dist, 0.0);
+    this.pos.set(this.initialpos);
+    this.isfixed = fix;
+    this.force.set(0, 0, 0);
+  }
+  
+  boolean isFixed(){
+    return this.isfixed;
+  }
+  
+  void setPos(float x, float y){
+    this.pos.set(x, y);
   }
   
   
-  public float getMass(){
-    return mass;
+  //Draw the particle 
+  public void display() {
+    fill(255);
+    ellipse(this.pos.x, this.pos.y, 10, 10);
   }
 
 }
