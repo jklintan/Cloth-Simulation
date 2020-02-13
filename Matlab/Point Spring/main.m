@@ -2,7 +2,7 @@ clear all;
 clc;
 close('all');
 
-plane_size = [10,10];                %Storleken på planet som ska skapas
+plane_size = [20,20];                %Storleken på planet som ska skapas
 z = ones(plane_size(1));            %Test-yta som är fixed (Bra för att prova mesh-funktionen)
 
 length = 5;                       %Simulationstid i sekunder
@@ -14,7 +14,7 @@ ks = 2000;                         %Fjäderkonstant
 kd = 8; 
 plane = point.empty;              %Skapa ett plan
 R = 1;
-perspective = [-10 10];
+perspective = [-plane_size(1) plane_size(2)];
 
 for i = 1:plane_size(1)
     for j = 1:plane_size(2)

@@ -25,7 +25,7 @@
 
    //Include GLEW
 #define GLEW_STATIC
-#include <GL/glew.h>
+#include <C:/Users/MeckBook/Documents/!TNM085/Cloth-Simulation/OpenGLVS - Template/External resources/GLEW/include/GL/glew.h>
 
 #include <cstdio>  // For C-style file input in readOBJ()
 #include <cmath>   // For sin() and cos() in soupCreateSphere()

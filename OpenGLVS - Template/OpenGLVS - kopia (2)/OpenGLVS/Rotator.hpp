@@ -12,7 +12,7 @@
 #define GLFW_INCLUDE_GLCOREARB
 #endif
 
-#include <GLFW/glfw3.h>
+#include <C:/Users/MeckBook/Documents/!TNM085/Cloth-Simulation/OpenGLVS - Template/External resources/GLFW/include/GLFW/glfw3.h>
 #include <cmath>
 
 // Some <cmath> headers define M_PI, some don't. Make sure we have it.

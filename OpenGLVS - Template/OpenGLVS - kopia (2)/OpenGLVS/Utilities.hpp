@@ -19,7 +19,7 @@
 #define GL_GLEXT_PROTOTYPES
 #endif
 
-#include <GLFW/glfw3.h>
+#include <C:/Users/MeckBook/Documents/!TNM085/Cloth-Simulation/OpenGLVS - Template/External resources/GLFW/include/GLFW/glfw3.h>
 
 #include <cstdio>  // For console messages
 
