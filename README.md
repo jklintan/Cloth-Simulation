@@ -1,5 +1,5 @@
 # Cloth Simulation
-This is a simulation implementing a cloth simulation. The project was first implemented using Matlab and then with compute shaders in OpenGL and GLSL. 
+This is a simulation implementing a cloth simulation. The project was first implemented using Matlab and then using Processing. 
 
 ## Requirements
 
