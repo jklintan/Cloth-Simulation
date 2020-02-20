@@ -27,6 +27,9 @@ class Point{
     void display(){
       fill(255);
       ellipse(this.x+50, this.y+50, 10, 10);
+      //translate(this.x+50,this.y+50,this.z+1000);
+      //rectMode(CENTER);
+      //rect(0,0,10,10);
       //translate(x,y,z);
       //sphere(0.1);
       }

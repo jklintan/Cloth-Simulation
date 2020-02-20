@@ -50,17 +50,27 @@ PVector f2 = new PVector();
 PVector f3 = new PVector();
 PVector f4 = new PVector();
 
+PVector temp_1 = new PVector();
+PVector temp_2 = new PVector();
+PVector temp_3 = new PVector();
+PVector temp_4 = new PVector();
+
+
 if(paddedPlane[x][y+1].ifPad == false)
 {
     
     PVector vec1 = new PVector(paddedPlane[x][y+1].x-paddedPlane[x][y].x, paddedPlane[x][y+1].y-paddedPlane[x][y].y, paddedPlane[x][y+1].z-paddedPlane[x][y].z);
     
     float vec1Length = vec1.mag();
-    PVector vel1 = paddedPlane[x][y+1].prevVel.sub(paddedPlane[x][y].prevVel);
+    
+    temp_1 = paddedPlane[x][y+1].prevVel;
+    
+    PVector vel1 = temp_1.sub(paddedPlane[x][y].prevVel);
    
-    float stiff1 = (float)(ks*(vec1Length-R));
+    float stiff1 = (ks*(vec1Length-R));
    
     f1 = (vec1.div(vec1Length)).mult(stiff1).add(vel1.mult(kd));
+    
     
 }
 else
@@ -74,9 +84,11 @@ if(paddedPlane[x+1][y].ifPad == false)
     
     float vec2Length = vec2.mag();
     
-    PVector vel2 = paddedPlane[x+1][y].prevVel.sub(paddedPlane[x][y].prevVel);
+    temp_2 = paddedPlane[x][y+1].prevVel;
     
-    float stiff2 = (float)(ks*(vec2Length-R));
+    PVector vel2 = temp_2.sub(paddedPlane[x][y].prevVel);
+    
+    float stiff2 = (ks*(vec2Length-R));
     
     f2 = (vec2.div(vec2Length)).mult(stiff2).add(vel2.mult(kd));
     
@@ -92,9 +104,11 @@ if(paddedPlane[x][y-1].ifPad == false)
     
     float vec3Length = vec3.mag();
     
-    PVector vel3 = paddedPlane[x][y-1].prevVel.sub(paddedPlane[x][y].prevVel);
+    temp_3 = paddedPlane[x][y+1].prevVel;
     
-    float stiff3 = (float)(ks*(vec3Length-R));
+    PVector vel3 = temp_3.sub(paddedPlane[x][y].prevVel);
+    
+    float stiff3 = (ks*(vec3Length-R));
     
     f3 = (vec3.div(vec3Length)).mult(stiff3).add(vel3.mult(kd));
     
@@ -110,9 +124,11 @@ if(paddedPlane[x-1][y].ifPad == false)
     
     float vec4Length = vec4.mag();
     
-    PVector vel4 = paddedPlane[x-1][y].prevVel.sub(paddedPlane[x][y].prevVel);
+    temp_4 = paddedPlane[x][y+1].prevVel;
     
-    float stiff4 = (float)(ks*(vec4Length-R));
+    PVector vel4 = temp_4.sub(paddedPlane[x][y].prevVel);
+    
+    float stiff4 = (ks*(vec4Length-R));
     
     f4 = (vec4.div(vec4Length)).mult(stiff4).add(vel4.mult(kd));
     
@@ -122,14 +138,13 @@ else
     f4.set(0,0,0);
 }
 
+//float mg = -m*9.81;
+PVector mg = new PVector(0,-m*9.82, 0);
+
 //External forces
-float mg = -m*9.81;
-
-
-PVector added_f = f1.add(f2.add(f3.add(f4)));
-//added_f = [0 0 0];
-added_f.z = added_f.z + mg;
-
+PVector added_f = new PVector(); 
+added_f = f1.add(f2.add(f3.add(f4.add(mg))));
+//added_f.set(0, mg, 0);
 
 return added_f;
 
@@ -143,9 +158,9 @@ Point[][] forceField (float dt,Point[][] plane, float ks,float kd,float R,float 
   //   Beräknar nya positioner [newPositions] för alla punkter, samt lagrar en iteration
   //   bakåt av geometrin. Beräknas med Verletintegration.
 
-
-
 PVector totPointForce = new PVector();
+PVector temp_1 = new PVector();
+PVector temp_2 = new PVector();
 
 int paddedrow = row+2;
 int paddedcol = col+2;
@@ -165,8 +180,10 @@ int counterY = 0;
         
         for(int j = 1; j < paddedcol-1; j++)
         {
-            
-            if (i == 1 && j == 1){
+            temp_1 = paddedPlane[i][j].prevVel;
+            temp_2 = paddedPlane[i][j].prevVel;
+     //i == 1 && j == 1       
+            if (1==0){
             totPointForce.set(0,0,0);
             newPositions[counterX][counterY] = new Point(0,0,0);
             }  
@@ -174,14 +191,14 @@ int counterY = 0;
             else
             {
                 totPointForce = applyForceKernel(paddedPlane,i,j,ks,kd,R,m);
-            
+                
                 PVector a = totPointForce.div(m);
-            
-                PVector v = paddedPlane[i][j].prevVel.add(a.mult(dt));
-            
+                
+                PVector v = temp_1.add(a.mult(dt));
+                
                 PVector p1 = new PVector(paddedPlane[i][j].x, paddedPlane[i][j].y, paddedPlane[i][j].z);
                 
-                PVector p2 = (paddedPlane[i][j].prevVel).mult(dt);
+                PVector p2 = (temp_2).mult(dt);
                 
                 PVector p = p1.add(p2);
                 
@@ -198,6 +215,7 @@ int counterY = 0;
         }
         counterX = counterX+1;
     }
+    
     return newPositions;
 }
 
