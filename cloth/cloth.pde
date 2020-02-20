@@ -5,60 +5,170 @@ int height = 200;
 int width = 400;
 int col = 15;
 int row = 15;
-float stiffness = -20;
-float damping = -4;
+float stiffness = -700;
+float damping = -2;
+float k_air = 0.002;
+int Area = col*row;
 float mass = 0.2;
 float ts = 0.001;
 int FPS = 60;
-PVector gravity = new PVector(0, -9.81);
+int offset = 200;
+int gravityInfluenceFactor = 700;
+PVector gravity = new PVector(0, -9.81*gravityInfluenceFactor);
+PVector chosenParticle = new PVector(0,0);
+boolean chosen = false;
+boolean renderParticles = true;
+int DIST = 30;
+int MASS_SIZE = 7;
+boolean renderBackground = false;
+String s = "CLOTH SIMULATION";
+String info = "This is an interactive simulation of a cloth. The calculations are based on a string-damper system that is solved using Euler's method";
+String instruction = "Press and drag with the left mouse button on a mass to move it. Press F to fixate/unfixate a chosen mass.";
+String moreInfo = "Change the values of the spring and damping coefficient in order to change the appearance of the cloth. Note that some values may cause an unstable behavior.";
+
+String about = "This simulation was created by Josefine Klintberg, Julius Halldan, Elin Karlsson and Olivia Enroth as a course project at Linköping University during 4 weeks 2020. \n\nMore info can be found at: \nhttp://github.com/jklintan/Cloth-Simulation.";
 
 particle[][] theparticles = new particle[row][col]; //Array for storing the particles in the grid
 
 import controlP5.*; // import controlP5 library
-ControlP5 controlP5; // controlP5 object
+ControlP5 gui; // controlP5 object
+PImage webImg;
 
 void settings(){
-  size(800, 800); //Size of window
+  size(1200, 900); //Size of window
   
   //Create lattice grid for cloth
   createLattice();
+  
+  //String url = "https://processing.org/img/processing-web.png";
+  // Load image from a web server
+  webImg = loadImage("./hanger.jpg", "jpg");
+  
     
 }
 
 void setup(){
 
   frameRate(60);
+
   
   //Interactive GUI menu
-  controlP5 = new ControlP5(this);
-  //controlP5.addSlider("Damping",10,100,30,700,30,30,120); // parameters : name, minimum, maximum, default value (float), x, y, width, height
-  //controlP5.addSlider("Stiffness",10,100,30,780,30,30,120); // parameters : name, minimum, maximum, default value (float), x, y, width, height
-  //controlP5.addNumberbox("numberbox1",100,650,30,100,40); // parameters : name, default value, posX, posY, sizeX, sizeY
+  gui = new ControlP5(this);
+  Button b = gui.addButton("RenderMasses");
+    b.setPosition(850,600);
+    b.setLabel("Toggle Masses");
+    b.setColorBackground(color(58, 76, 100));
+    b.setColorActive(color(158, 182, 206));
+    b.setSize(130,40);
+    b.activateBy(ControlP5.PRESS);
   
-  background(0, 0, 0);
-  stroke(255);
+  Button reset = gui.addButton("Reset");
+    reset.setPosition(1000,600);    
+    reset.setColorActive(color(158, 182, 206));
+    reset.setColorBackground(color(58, 76, 100));
+    reset.setLabel("Reset");
+    reset.setSize(130, 40);
+    reset.activateBy(ControlP5.PRESS);
   
-  //for(int rows=0; rows<row; rows++){
-  //  for(int cols=0; cols<col; cols++){
-  //    theparticles[cols][rows].setPos(0, rows);
-  //  }
-  //}
+  gui.addSlider ("MassSize")
+    .setPosition(850,400)
+    .setSize(280,30)
+    .setRange(5,15)
+    .setValue(7)
+    .setColorBackground(color(99, 127, 158))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(58, 76, 100))
+    .setColorValue(255)
+    .setSliderMode(Slider.FLEXIBLE);
+  
+    gui.addSlider ("Stiffness")
+    .setPosition(850,460)
+    .setSize(280,30)
+    .setRange(10,1000)
+    .setValue(700)
+    .setColorBackground(color(99, 127, 158))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(58, 76, 100))
+    .setColorValue(255)
+    .setSliderMode(Slider.FLEXIBLE);
+    
+   gui.addSlider ("Damping")
+    .setPosition(850,520)
+    .setSize(280,30)
+    .setRange(0,14.9)
+    .setValue(12)
+    .setColorBackground(color(99, 127, 158))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(58, 76, 100))
+    .setColorValue(255)
+    .setSliderMode(Slider.FLEXIBLE);
+  
+  drawLattice();
+  webImg.resize(1200, 2000);
+}
+
+public void Stiffness(int ks){
+  stiffness = -ks;
+}
+
+public void Damping(int kd){
+  damping = -(15-kd);
+}
+
+public void MassSize(int size){
+  MASS_SIZE = size;
+}
+
+public void Gravity(int g){
+  gravityInfluenceFactor = g;
+}
+
+public void RenderMasses(){
+  if(renderParticles == false)
+    renderParticles = true;
+   else
+     renderParticles = false;
+
+}
+
+public void Reset(){
+  renderParticles = true;
+  settings();
+
+}
+
+public void controlEvent(ControlEvent theEvent) {
 }
 
 
 void draw(){
-  background(0);
-  
-  //Draw the particles
-  drawLattice();
-  
-  //Calculate forces
-  updateParticles();
-  
-  //print(theparticles[1][1].pos);
-  
-  //Update positions with numerical method
 
+  //Draw the particles
+  stroke(0);
+  background(color(11, 13, 18));
+  fill(color(11, 13, 18));
+  rect(2, 2, 1196, 896);
+    
+  //GUI info
+  fill(255);
+  rect(795, 5, 400, 890);
+  fill(color(11, 13, 18));
+  textSize(28.7);
+  text(s, 850, 60, 350, 100); 
+  textSize(12);
+  text(info, 850, 130, 300, 100); 
+  text(instruction, 850, 200, 300, 100); 
+  text(moreInfo, 850, 270, 300, 100); 
+  text("Stiffness", 850, 440, 280, 100); 
+  text("Damping", 850, 500, 280, 100); 
+  text("Mass Size", 850, 380, 280, 100); 
+  
+  textSize(10);
+  text(about, 850, 700, 280, 200); 
+  
+  stroke(255);
+  drawLattice();
+  updateParticles(); //Update forces acting on particles and positions according to Euler
 }
 
 
@@ -69,14 +179,10 @@ void createGUI(){
 void createLattice(){
   for(int rows=0; rows<row; rows++){
     for(int cols=0; cols<col; cols++){
-      if(rows == 0 && cols == col-1){
-         theparticles[cols][rows] = new particle(cols, rows,20, true);
-      }
-      else if(rows == 0 && cols == 0){
-       theparticles[cols][rows] = new particle(cols, rows,20, true);
-      //  print("fixed");
+      if((rows == 0 && cols == 0) || rows == 0 && cols == col-1 || (rows == 0 && cols == floor(col/2))){
+        theparticles[cols][rows] = new particle(cols, rows,DIST, true);
       }else{
-       theparticles[cols][rows] = new particle(cols, rows, 20, false);
+       theparticles[cols][rows] = new particle(cols, rows, DIST, false);
       }
     }
   }
@@ -86,25 +192,24 @@ void createLattice(){
 void drawLattice(){
   for(int y=0; y<row; y++){
     for(int x=0; x<col; x++){
+      if(renderParticles){
        theparticles[y][x].display();
-       strokeWeight(0.5);
+      }
+       fill(255);
+       strokeWeight(1);
+       stroke(255);
        if(x == 0 && y >= 0 && y < row-1){
-         line(theparticles[y][x].pos.x +150, theparticles[y][x].pos.y +150, theparticles[y+1][x].pos.x +150, theparticles[y+1][x].pos.y +150);
+         line(theparticles[y][x].pos.x + offset, theparticles[y][x].pos.y + 100, theparticles[y+1][x].pos.x + offset, theparticles[y+1][x].pos.y + 100);
        }
        if(y == 0 && x >= 0 && x < col-1){
          //line(theparticles[y][x].pos.x, theparticles[y][x].pos.y, theparticles[y][x+1].pos.x, theparticles[y][x+1].pos.y);
        }
        if(y >= 0 && x >= 1){
           
-          line(theparticles[y][x].pos.x +150, theparticles[y][x].pos.y +150, theparticles[y][x-1].pos.x +150, theparticles[y][x-1].pos.y +150);
-          
-          
+          line(theparticles[y][x].pos.x + offset, theparticles[y][x].pos.y + 100, theparticles[y][x-1].pos.x + offset, theparticles[y][x-1].pos.y + 100);
           
           if(y >= 1){
-            line(theparticles[y][x].pos.x + 150, theparticles[y][x].pos.y + 150, theparticles[y-1][x].pos.x + 150, theparticles[y-1][x].pos.y +150);
-        
-            //line(theparticles[y][x-1].pos.x, theparticles[y][x-1].pos.y, theparticles[y][x].pos.x, theparticles[y][x].pos.y);      
-            //line(theparticles[y-1][x-1].pos.x, theparticles[y-1][x-1].pos.y, theparticles[y][x].pos.x, theparticles[y][x].pos.y);
+            line(theparticles[y][x].pos.x + offset, theparticles[y][x].pos.y + 100, theparticles[y-1][x].pos.x + offset, theparticles[y-1][x].pos.y + 100);
           }  
      }
     }
@@ -147,7 +252,7 @@ void updateParticles(){
            
             L = 10; //Initial link
             
-            //Link 1
+            // Link 1
             if (r < row-1 && c > 0){
                 L = theparticles[c][r].initialpos.dist(theparticles[prevCol][nextRow].initialpos);
                 xij = PVector.sub(theparticles[c][r].pos, theparticles[prevCol][nextRow].pos);
@@ -173,7 +278,7 @@ void updateParticles(){
                 fb2 = PVector.mult(n, -damping);
             }
 
-            ////Link 3
+            // Link 3
             if (c < col-1){
                 L = PVector.dist(theparticles[c][r].initialpos, theparticles[nextCol][r].initialpos);
                 xij = PVector.sub(theparticles[c][r].pos, theparticles[nextCol][r].pos);
@@ -186,7 +291,7 @@ void updateParticles(){
                 fb3 = PVector.mult(n, -damping);
             }
 
-            //// Link 4
+            // Link 4
             if (r > 0 && c < col-1){
                 L = theparticles[c][r].initialpos.dist(theparticles[nextCol][prevRow].initialpos);
                 xij = PVector.sub(theparticles[c][r].pos, theparticles[nextCol][prevRow].pos);
@@ -199,7 +304,7 @@ void updateParticles(){
                 fb4 = PVector.mult(n, -damping);
             }
 
-            ////Link 5
+            // Link 5
             if (r > 0){
                 L = theparticles[c][r].initialpos.dist(theparticles[c][prevRow].initialpos);
                 xij = PVector.sub(theparticles[c][r].pos, theparticles[c][prevRow].pos);
@@ -212,7 +317,7 @@ void updateParticles(){
                 fb5 = PVector.mult(n, -damping);
             }
 
-            ////Link 6
+            // Link 6
             if (c > 0){
                 L = theparticles[c][r].initialpos.dist(theparticles[prevCol][r].initialpos);
                 xij = PVector.sub(theparticles[c][r].pos, theparticles[prevCol][r].pos);
@@ -252,17 +357,12 @@ void updateParticles(){
             }
 
             PVector def = new PVector(0,0,0);
-            //PVector allForces = def.add(fs1).add(fs2).add(fs3).add(fs4).add(fs5).add(fs6).add(fs7)
-            //                            .add(fs8).add(fb1).add(fb2).add(fb3).add(fb4).add(fb5)
-            //                            .add(fb6).add(fb7).add(fb8)
-            //                            .add(PVector.mult(gravity, mass)).sub(theparticles[r][c].force);
             theparticles[c][r].force = def.sub(fs1).sub(fs2).sub(fs3).sub(fs4).sub(fs5).sub(fs6).sub(fs7)
                                         .sub(fs8).sub(fb1).sub(fb2).sub(fb3).sub(fb4).sub(fb5)
                                         .sub(fb6).sub(fb7).sub(fb8)
                                         .sub(PVector.mult(gravity, mass));
-            theparticles[c][r].force.add(theparticles[c][r].force);
-           //theparticles[c][r].force = def.sub(PVector.mult(gravity, mass)).mult(2);
-           print(theparticles[1][1].force + "\n");
+            PVector AirResistance =  new PVector().add(theparticles[c][r].vel).mult(k_air*Area);
+            theparticles[c][r].force.add(theparticles[c][r].force).sub(AirResistance); //Add air resistance
 
         }
     }
@@ -271,31 +371,9 @@ void updateParticles(){
     for(int r = 0; r < row; r++){      
         for(int c = 0; c < col; c++){
             if(!theparticles[c][r].isfixed){  //Upate all nodes except the fixed ones 
-                theparticles[c][r].acc.set(PVector.div(theparticles[c][r].force, mass));
-               // PVector lastPos = theparticles[c][r].pos;
-               // theparticles[c][r].pos.set(2*theparticles[c][r].pos.x - theparticles[c][r].oldpos.x + ts*ts*theparticles[c][r].acc.x, 2*theparticles[c][r].pos.y - theparticles[c][r].oldpos.y + ts*ts*theparticles[c][r].acc.y);
-                //theparticles[c][r].vel.set(1/2*ts * theparticles[c][r].pos.x - lastPos.x, 1/2*ts * theparticles[c][r].pos.y - lastPos.y);
-                //theparticles[c][r].oldpos.set(theparticles[c][r].pos);
-
-               theparticles[c][r].vel.set(theparticles[c][r].vel.x + ts*theparticles[c][r].acc.x, theparticles[c][r].vel.y + ts*theparticles[c][r].acc.y);
-               theparticles[c][r].pos.set(theparticles[c][r].pos.x + ts*theparticles[c][r].vel.x, theparticles[c][r].pos.y + ts*theparticles[c][r].vel.y);
-                //print(theparticles[c][r].pos);
-
-                
-                //Euler method for updating position and velocity
-                //theparticles[r][c].vel.x = xtEuler(theparticles[r][c].vel.x, theparticles[r][c].acc.x, ts);
-                //theparticles[r][c].vel.y = xtEuler(theparticles[r][c].vel.y, theparticles[r][c].acc.y, ts);
-                //theparticles[r][c].pos.x = xtEuler(theparticles[r][c].pos.x, theparticles[r][c].vel.x, ts);
-                //theparticles[r][c].pos.y = xtEuler(theparticles[r][c].pos.y, theparticles[r][c].vel.y, ts);
-                //theparticles[r][c].setPos(xtEuler(theparticles[r][c].pos.x, theparticles[r][c].vel.x, ts), xtEuler(theparticles[r][c].pos.y, theparticles[r][c].vel.y, ts));
-                
-               // print(theparticles[r][c].pos);
-                //Verlet method for updating position and velocity
-                //[node(r,c).pos_old, node(r,c).pos, node(r,c).vel] = Verlet(node(r,c).pos, node(r,c).pos_old, node(r,c).acc, ts);
-            }else{
-              //print(theparticles[r][c].pos);
-              //theparticles[r][c].isfixed = false;
-              //theparticles[r][c].pos.set((r-1)*20, (c-1)*20);
+               theparticles[c][r].acc.set(PVector.div(theparticles[c][r].force, mass));
+               theparticles[c][r].vel.set(xtEuler(theparticles[c][r].vel.x, theparticles[c][r].acc.x, ts), xtEuler(theparticles[c][r].vel.y, theparticles[c][r].acc.y, ts));
+               theparticles[c][r].pos.set(xtEuler(theparticles[c][r].pos.x, theparticles[c][r].vel.x, ts), xtEuler(theparticles[c][r].pos.y, theparticles[c][r].vel.y, ts));
             }
         }
     }
@@ -305,4 +383,45 @@ void updateParticles(){
 // Update velocity or position according to Eulers method
 float xtEuler(float xt, float xtPrim, float h){
   return xt + h*xtPrim;
+}
+
+//Fix and unfix particles
+void keyPressed(){
+    if (keyPressed && keyCode == 'F' || keyCode == 'f') {
+    if(chosen){
+      if(theparticles[int(chosenParticle.x)][int(chosenParticle.y)].isFixed()){
+        theparticles[int(chosenParticle.x)][int(chosenParticle.y)].isfixed = false;
+      }else{
+        theparticles[int(chosenParticle.x)][int(chosenParticle.y)].isfixed = true;
+      }
+    }    
+  }
+}
+
+//Chose a specific particle
+void mousePressed() { 
+  if (mousePressed && (mouseButton == LEFT)) {
+     PVector mousePos = new PVector(mouseX, mouseY);
+     for(int r = 0; r < row; r++){
+          for(int c = 0; c < col; c++){
+            if(abs(theparticles[c][r].pos.x - mousePos.x + 200) < 10 && abs(theparticles[c][r].pos.y - mousePos.y + 100) < 10){
+              chosenParticle = new PVector(c, r);
+              chosen = true;
+              return;
+            }
+          }
+   }
+    
+  }
+}
+
+void mouseReleased(){
+  chosen = false;
+}
+
+//Move the current particle
+void mouseDragged(){
+  if(chosen){
+      theparticles[int(chosenParticle.x)][int(chosenParticle.y)].setPos(mouseX-200, mouseY-100);
+  }
 }
