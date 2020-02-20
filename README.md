@@ -33,6 +33,14 @@ x'(t+1) = 1/(2h)(x(t) - x(t-1)
 ```
 This approach is an advantage since the position doesn't require the velocity to be calculated and it is also a more stable solution for the cloth simulation. This is the approach used for implementing the simulation in OpenGL. 
 
+## Processing Implementation
+
+The next approach for the simulation was to take it out of Matlab and implement in a graphical way. The group chose to work with Processing in order to obtain a simple way to create a rendering window. The code from the 2D-implementation in matlab was successfully implemented in Processing with a class called particle to represent the nodes in Matlab. 
+
+A GUI and user interaction for allowing the user to change parameters of the cloth and to drag masses over the screen as well as fixating certain masses was added. The result from the final demo can be seen below: 
+
+<img width="100%" src="./img/clothSimulation.PNG"/>
+
 ## Sources and attribution
 
 The 2D plot of the spring-damper system is built upon the approach of Auralius Manurung's [Matlab Project of a Deformable Object](https://www.mathworks.com/matlabcentral/fileexchange/52931-deformable-object-with-interconnected-mass-spring-damper) that uses the nodes system from the navigation toolbox in Matlab to represent the masses in the lattice. 
