@@ -1,21 +1,30 @@
 //Interactive Cloth simulation
 
 // ************************* SETTINGS AND GLOBAL VARIABLE ***************************** //
-int height = 200;
-int width = 400;
+
+//Size of window and cloth, note that a square cloth is needed
+int height = 900;
+int width = 1200;
 int col = 14;
 int row = 14;
-float stiffness = -700;
-float damping = -2;
-float k_air = 0.002;
 int Area = col*row;
-float mass = 0.2;
-float ts = 0.001;
 int FPS = 60;
 int offsetX = 200;
 int offsetY = 100;
+int DIST = 30;
+int MASS_SIZE = 7;
+particle[][] theparticles = new particle[row][col]; //Array for storing the particles in the grid
+
+//Simulation constants
+float stiffness = -700;
+float damping = -2;
+float k_air = 0.002;
+float mass = 0.2;
+float ts = 0.001; //Euler timestep (note that smaller than 0.001 needed for stability)
 int gravityInfluenceFactor = 700;
 PVector gravity = new PVector(0, -9.81*gravityInfluenceFactor);
+
+//Displaying particles and interaction
 PVector chosenParticle = new PVector(0, 0);
 boolean chosen = false;
 boolean renderParticles = true;
@@ -27,17 +36,13 @@ int colorT = color(255);
 int colorT2 = color(255);
 int colorT3 = color(255);
 
-int DIST = 30;
-int MASS_SIZE = 7;
+// Background and GUI
 boolean renderBackground = false;
 String s = "CLOTH SIMULATION";
 String info = "This is an interactive simulation of a cloth. The calculations are based on a string-damper system that is solved using Euler's method";
 String instruction = "Press and drag with the left mouse button on a mass to move it. Press F to fixate/unfixate a chosen mass.";
 String moreInfo = "Change the values of the spring and damping coefficient in order to change the appearance of the cloth. Note that some values may cause an unstable behavior.";
 String about = "More info can be found at: \nhttp://github.com/jklintan/Cloth-Simulation.";
-
-particle[][] theparticles = new particle[row][col]; //Array for storing the particles in the grid
-
 import controlP5.*; // import controlP5 library
 ControlP5 gui; // controlP5 object
 PImage textureIm, im1, im2, im3, im4;
@@ -48,7 +53,7 @@ int heavyFactor = 3;
 // ******************* SETTINGS ********************* //
 
 void settings() {
-  size(1200, 900, P3D); //Size of window
+  size(width, height, P3D); //Size of window
 
   //Create lattice grid for cloth
   createLattice();
@@ -61,137 +66,17 @@ void setup() {
   frameRate(60);
 
   //Interactive GUI menu
-  gui = new ControlP5(this);
-  Button b = gui.addButton("RenderMasses");
-  b.setPosition(850, 620);
-  b.setLabel("Display Masses");
-  b    .setColorBackground(color(28, 38, 53));
-  b.setColorActive(color(158, 182, 206));
-  b.setSize(85, 20);
-  b.setLock(true);
+  createGUI();
 
-  Button b2 = gui.addButton("RenderTexture");
-  b2.setPosition(950, 620);
-  b2.setLabel("Toggle Texture");
-  b2.setColorBackground(color(28, 38, 53));
-  b2.setSize(85, 20);
-  b2.setLock(true);
-
-  Button b3 = gui.addButton("WindAdd")
-  .setPosition(1050, 620)
-  .setLabel("Toggle Wind")
-    .setColorBackground(color(28, 38, 53))
-  .setSize(85, 20)
-  .setLock(true);
-
-
-  Button toggleText = gui.addButton("SwitchText")
-    .setPosition(950, 700)
-    .setColorActive(color(158, 182, 206))
-    .setColorBackground(color(28, 38, 53))
-    .setLabel("Switch Texture")
-    .setSize(85, 40)
-    .activateBy(ControlP5.PRESS);
-
-
-  Button reset = gui.addButton("Reset");
-  reset.setPosition(850, 760);    
-  reset.setColorActive(color(158, 182, 206));
-  reset.setColorBackground(color(11, 13, 18));
-  reset.setLabel("Reset");
-  reset.setSize(290, 40);
-  reset.activateBy(ControlP5.PRESS);
-
-  gui.addSlider ("MassSize")
-    .setPosition(850, 380)
-    .setSize(285, 30)
-    .setRange(5, 15)
-    .setValue(7)
-    .setColorBackground(color(28, 38, 53))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorValue(255)
-    .setSliderMode(Slider.FLEXIBLE);
-
-  gui.addSlider ("Stiffness")
-    .setPosition(850, 440)
-    .setSize(285, 30)
-    .setRange(10, 3000)
-    .setValue(700)
-    .setColorBackground(color(28, 38, 53))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorValue(255)
-    .setSliderMode(Slider.FLEXIBLE);
-
-  gui.addSlider ("WindStrength")
-    .setPosition(850, 560)
-    .setSize(285, 30)
-    .setRange(-3000, 3000)
-    .setValue(0)
-    .setLabel("Wind Strength")
-    .setColorBackground(color(28, 38, 53))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorValue(255)
-    .setSliderMode(Slider.FLEXIBLE);
-
-  gui.addSlider ("Damping")
-    .setPosition(850, 500)
-    .setSize(285, 30)
-    .setRange(0, 14.9)
-    .setValue(12)
-    .setColorBackground(color(28, 38, 53))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorValue(255)
-    .setSliderMode(Slider.FLEXIBLE);
-
-  Toggle t = gui.addToggle("toggle")
-    .setPosition(1050, 650)
-    .setSize(85, 30)
-    .setValue(false)
-    .setLabel("Wind")
-    .setColorBackground(color(58, 76, 100))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorLabel(color(255))
-    .setMode(ControlP5.SWITCH)
-    ;
-
-  Toggle t2 = gui.addToggle("toggleTexture")
-    .setPosition(950, 650)
-    .setSize(85, 30)
-    .setValue(false)
-    .setLabel("Texture")
-    .setColorBackground(color(58, 76, 100))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorLabel(color(255))
-    .setMode(ControlP5.SWITCH)
-    ;
-
-  Toggle t3 = gui.addToggle("toggleMasses")
-    .setPosition(850, 650)
-    .setSize(85, 30)
-    .setValue(true)
-    .setLabel("Mass")
-    .setColorBackground(color(58, 76, 100))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorLabel(color(255))
-    .setMode(ControlP5.SWITCH)
-    ;
-
-
+  //Draw the lattice
   drawLattice();
 
+  //Textures
   im1 = loadImage("cloth.jpg");
   im2 = loadImage("silk.jpg");
   im3 = loadImage("fabric.jpg");
   im4 = loadImage("mt.png");
   textureMode(NORMAL);
-
   textureIm = im1;
 }
 
@@ -241,11 +126,7 @@ void draw() {
   //stroke(255);
 }
 
-
-void createGUI() {
-}
-
-// Create the lattice
+//********************* Create the lattice **********************//
 void createLattice() {
   for (int rows=0; rows<row; rows++) {
     for (int cols=0; cols<col; cols++) {
@@ -313,7 +194,7 @@ void drawLattice() {
   }
 }
 
-// Update particles
+//************************* Update particles **************************//
 void updateParticles() {
   PVector fs1, fs2, fs3, fs4, fs5, fs6, fs7, fs8, fb1, fb2, fb3, fb4, fb5, fb6, fb7, fb8, xij;
   float norm_xij, L; 
@@ -536,6 +417,130 @@ void mouseDragged() {
 }
 
 //******************************* GUI ********************************//
+
+
+void createGUI() {
+  gui = new ControlP5(this);
+  Button b = gui.addButton("RenderMasses")
+    .setPosition(850, 620)
+    .setLabel("Display Masses")
+    .setColorBackground(color(28, 38, 53))
+    .setColorActive(color(158, 182, 206))
+    .setSize(85, 20)
+    .setLock(true);
+
+  Button b2 = gui.addButton("RenderTexture")
+    .setPosition(950, 620)
+    .setLabel("Toggle Texture")
+    .setColorBackground(color(28, 38, 53))
+    .setSize(85, 20)
+    .setLock(true);
+
+  Button b3 = gui.addButton("WindAdd")
+    .setPosition(1050, 620)
+    .setLabel("Toggle Wind")
+    .setColorBackground(color(28, 38, 53))
+    .setSize(85, 20)
+    .setLock(true);
+
+  Button toggleText = gui.addButton("SwitchText")
+    .setPosition(950, 700)
+    .setColorActive(color(158, 182, 206))
+    .setColorBackground(color(28, 38, 53))
+    .setLabel("Switch Texture")
+    .setSize(85, 40)
+    .activateBy(ControlP5.PRESS);
+
+  Button reset = gui.addButton("Reset")
+    .setPosition(850, 760)
+    .setColorActive(color(158, 182, 206))
+    .setColorBackground(color(11, 13, 18))
+    .setLabel("Reset")
+    .setSize(290, 40)
+    .activateBy(ControlP5.PRESS);
+
+  gui.addSlider ("MassSize")
+    .setPosition(850, 380)
+    .setSize(285, 30)
+    .setRange(5, 15)
+    .setValue(7)
+    .setColorBackground(color(28, 38, 53))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
+    .setColorValue(255)
+    .setSliderMode(Slider.FLEXIBLE);
+
+  gui.addSlider ("Stiffness")
+    .setPosition(850, 440)
+    .setSize(285, 30)
+    .setRange(10, 3000)
+    .setValue(700)
+    .setColorBackground(color(28, 38, 53))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
+    .setColorValue(255)
+    .setSliderMode(Slider.FLEXIBLE);
+
+  gui.addSlider ("WindStrength")
+    .setPosition(850, 560)
+    .setSize(285, 30)
+    .setRange(-3000, 3000)
+    .setValue(0)
+    .setLabel("Wind Strength")
+    .setColorBackground(color(28, 38, 53))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
+    .setColorValue(255)
+    .setSliderMode(Slider.FLEXIBLE);
+
+  gui.addSlider ("Damping")
+    .setPosition(850, 500)
+    .setSize(285, 30)
+    .setRange(0, 14.9)
+    .setValue(12)
+    .setColorBackground(color(28, 38, 53))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
+    .setColorValue(255)
+    .setSliderMode(Slider.FLEXIBLE);
+
+  Toggle t = gui.addToggle("toggle")
+    .setPosition(1050, 650)
+    .setSize(85, 30)
+    .setValue(false)
+    .setLabel("Wind")
+    .setColorBackground(color(58, 76, 100))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
+    .setColorLabel(color(255))
+    .setMode(ControlP5.SWITCH)
+    ;
+
+  Toggle t2 = gui.addToggle("toggleTexture")
+    .setPosition(950, 650)
+    .setSize(85, 30)
+    .setValue(false)
+    .setLabel("Texture")
+    .setColorBackground(color(58, 76, 100))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
+    .setColorLabel(color(255))
+    .setMode(ControlP5.SWITCH)
+    ;
+
+  Toggle t3 = gui.addToggle("toggleMasses")
+    .setPosition(850, 650)
+    .setSize(85, 30)
+    .setValue(true)
+    .setLabel("Mass")
+    .setColorBackground(color(58, 76, 100))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
+    .setColorLabel(color(255))
+    .setMode(ControlP5.SWITCH)
+    ;
+}
+
 
 public void Stiffness(int ks) {
   stiffness = -ks;
