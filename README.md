@@ -39,7 +39,19 @@ The next approach for the simulation was to take it out of Matlab and implement 
 
 A GUI and user interaction for allowing the user to change parameters of the cloth and to drag masses over the screen as well as fixating certain masses was added. The result from the final demo can be seen below: 
 
-<img width="100%" src="./img/GUI.PNG"/>
+<img width="100%" src="./img/gui.PNG"/>
+
+# Texture
+
+Using UV-coordinates for each of the masses in the lattice, it is possible to display an image as a texture over the cloth. With this, different types of fabric can be simulated. 
+
+<img width="100%" src="./img/texture.PNG"/>
+
+# Wind
+
+Wind is implemented with the use of adding two different noises that are mapped together. The user can change the wind strength with a slider. 
+
+<img width="100%" src="./img/wind.PNG"/>
 
 ## Sources and attribution
 
