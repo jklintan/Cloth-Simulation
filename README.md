@@ -33,7 +33,7 @@ x'(t+1) = 1/(2h)(x(t) - x(t-1)
 ```
 This approach is an advantage since the position doesn't require the velocity to be calculated and it is also a more stable solution for the cloth simulation. This is the approach used for implementing the simulation in OpenGL. 
 
-# Force update
+### Force update
 
 Each mass in the cloth is affected by 3 to 8 spring forces and 3 to 8 damping forces, depending on its placement in the grid. The simulation loops through the 2D-array of masses and for each mass, it calculates the forces acting on it by the other particles. The forces are summed up along with the gravitational force, air resistance and wind force. Each mass then gets an updated position and velocity with the use of either the Euler method or the Verlet method. 
 
