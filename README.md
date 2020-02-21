@@ -39,7 +39,7 @@ The next approach for the simulation was to take it out of Matlab and implement 
 
 A GUI and user interaction for allowing the user to change parameters of the cloth and to drag masses over the screen as well as fixating certain masses was added. The result from the final demo can be seen below: 
 
-<img width="100%" src="./img/clothSimulation.PNG"/>
+<img width="100%" src="./img/GUI.PNG"/>
 
 ## Sources and attribution
 
