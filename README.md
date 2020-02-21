@@ -41,6 +41,11 @@ A GUI and user interaction for allowing the user to change parameters of the clo
 
 <img width="100%" src="./img/gui.PNG"/>
 
+# Interaction
+A lot of sliders and buttons are added in order to allow the user to interact with the parameters that builds up the cloth. Using the mousePressed and mouseDragged function, the user can interact with single masses in the cloth and drag them around. This is applied as an external force to the current mass and the user can either just drag it around or use the key F to fixate or unfixate chosen masses. 
+
+<img width="100%" src="./img/interaction.PNG"/>
+
 # Texture
 
 Using UV-coordinates for each of the masses in the lattice, it is possible to display an image as a texture over the cloth. With this, different types of fabric can be simulated. 
