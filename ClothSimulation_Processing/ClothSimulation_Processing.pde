@@ -3,8 +3,8 @@
 // ************************* SETTINGS AND GLOBAL VARIABLE ***************************** //
 int height = 200;
 int width = 400;
-int col = 15;
-int row = 15;
+int col = 14;
+int row = 14;
 float stiffness = -700;
 float damping = -2;
 float k_air = 0.002;
@@ -12,12 +12,21 @@ int Area = col*row;
 float mass = 0.2;
 float ts = 0.001;
 int FPS = 60;
-int offset = 200;
+int offsetX = 200;
+int offsetY = 100;
 int gravityInfluenceFactor = 700;
 PVector gravity = new PVector(0, -9.81*gravityInfluenceFactor);
 PVector chosenParticle = new PVector(0, 0);
 boolean chosen = false;
 boolean renderParticles = true;
+
+// Wind
+boolean windActive = false;
+int windFactor = 0;
+int colorT = color(255);
+int colorT2 = color(255);
+int colorT3 = color(255);
+
 int DIST = 30;
 int MASS_SIZE = 7;
 boolean renderBackground = false;
@@ -25,17 +34,21 @@ String s = "CLOTH SIMULATION";
 String info = "This is an interactive simulation of a cloth. The calculations are based on a string-damper system that is solved using Euler's method";
 String instruction = "Press and drag with the left mouse button on a mass to move it. Press F to fixate/unfixate a chosen mass.";
 String moreInfo = "Change the values of the spring and damping coefficient in order to change the appearance of the cloth. Note that some values may cause an unstable behavior.";
-String about = "This simulation was created by Josefine Klintberg, Julius Halldan, Elin Karlsson and Olivia Enroth as a course project at Linköping University during 4 weeks 2020. \n\nMore info can be found at: \nhttp://github.com/jklintan/Cloth-Simulation.";
+String about = "More info can be found at: \nhttp://github.com/jklintan/Cloth-Simulation.";
 
 particle[][] theparticles = new particle[row][col]; //Array for storing the particles in the grid
 
 import controlP5.*; // import controlP5 library
 ControlP5 gui; // controlP5 object
+PImage textureIm, im1, im2, im3, im4;
+int nTextures = 1;
+boolean renderTexture = false;
+int heavyFactor = 3;
 
 // ******************* SETTINGS ********************* //
 
 void settings() {
-  size(1200, 900); //Size of window
+  size(1200, 900, P3D); //Size of window
 
   //Create lattice grid for cloth
   createLattice();
@@ -50,55 +63,136 @@ void setup() {
   //Interactive GUI menu
   gui = new ControlP5(this);
   Button b = gui.addButton("RenderMasses");
-  b.setPosition(850, 600);
-  b.setLabel("Toggle Masses");
-  b.setColorBackground(color(58, 76, 100));
+  b.setPosition(850, 620);
+  b.setLabel("Display Masses");
+  b    .setColorBackground(color(28, 38, 53));
   b.setColorActive(color(158, 182, 206));
-  b.setSize(130, 40);
-  b.activateBy(ControlP5.PRESS);
+  b.setSize(85, 20);
+  b.setLock(true);
+
+  Button b2 = gui.addButton("RenderTexture");
+  b2.setPosition(950, 620);
+  b2.setLabel("Toggle Texture");
+  b2.setColorBackground(color(28, 38, 53));
+  b2.setSize(85, 20);
+  b2.setLock(true);
+
+  Button b3 = gui.addButton("WindAdd")
+  .setPosition(1050, 620)
+  .setLabel("Toggle Wind")
+    .setColorBackground(color(28, 38, 53))
+  .setSize(85, 20)
+  .setLock(true);
+
+
+  Button toggleText = gui.addButton("SwitchText")
+    .setPosition(950, 700)
+    .setColorActive(color(158, 182, 206))
+    .setColorBackground(color(28, 38, 53))
+    .setLabel("Switch Texture")
+    .setSize(85, 40)
+    .activateBy(ControlP5.PRESS);
+
 
   Button reset = gui.addButton("Reset");
-  reset.setPosition(1000, 600);    
+  reset.setPosition(850, 760);    
   reset.setColorActive(color(158, 182, 206));
-  reset.setColorBackground(color(58, 76, 100));
+  reset.setColorBackground(color(11, 13, 18));
   reset.setLabel("Reset");
-  reset.setSize(130, 40);
+  reset.setSize(290, 40);
   reset.activateBy(ControlP5.PRESS);
 
   gui.addSlider ("MassSize")
-    .setPosition(850, 400)
-    .setSize(280, 30)
+    .setPosition(850, 380)
+    .setSize(285, 30)
     .setRange(5, 15)
     .setValue(7)
-    .setColorBackground(color(99, 127, 158))
+    .setColorBackground(color(28, 38, 53))
     .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(58, 76, 100))
+    .setColorActive(color(11, 13, 18))
     .setColorValue(255)
     .setSliderMode(Slider.FLEXIBLE);
 
   gui.addSlider ("Stiffness")
-    .setPosition(850, 460)
-    .setSize(280, 30)
-    .setRange(10, 1000)
+    .setPosition(850, 440)
+    .setSize(285, 30)
+    .setRange(10, 3000)
     .setValue(700)
-    .setColorBackground(color(99, 127, 158))
+    .setColorBackground(color(28, 38, 53))
     .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(58, 76, 100))
+    .setColorActive(color(11, 13, 18))
+    .setColorValue(255)
+    .setSliderMode(Slider.FLEXIBLE);
+
+  gui.addSlider ("WindStrength")
+    .setPosition(850, 560)
+    .setSize(285, 30)
+    .setRange(-3000, 3000)
+    .setValue(0)
+    .setLabel("Wind Strength")
+    .setColorBackground(color(28, 38, 53))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
     .setColorValue(255)
     .setSliderMode(Slider.FLEXIBLE);
 
   gui.addSlider ("Damping")
-    .setPosition(850, 520)
-    .setSize(280, 30)
+    .setPosition(850, 500)
+    .setSize(285, 30)
     .setRange(0, 14.9)
     .setValue(12)
-    .setColorBackground(color(99, 127, 158))
+    .setColorBackground(color(28, 38, 53))
     .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(58, 76, 100))
+    .setColorActive(color(11, 13, 18))
     .setColorValue(255)
     .setSliderMode(Slider.FLEXIBLE);
 
+  Toggle t = gui.addToggle("toggle")
+    .setPosition(1050, 650)
+    .setSize(85, 30)
+    .setValue(false)
+    .setLabel("Wind")
+    .setColorBackground(color(58, 76, 100))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
+    .setColorLabel(color(255))
+    .setMode(ControlP5.SWITCH)
+    ;
+
+  Toggle t2 = gui.addToggle("toggleTexture")
+    .setPosition(950, 650)
+    .setSize(85, 30)
+    .setValue(false)
+    .setLabel("Texture")
+    .setColorBackground(color(58, 76, 100))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
+    .setColorLabel(color(255))
+    .setMode(ControlP5.SWITCH)
+    ;
+
+  Toggle t3 = gui.addToggle("toggleMasses")
+    .setPosition(850, 650)
+    .setSize(85, 30)
+    .setValue(true)
+    .setLabel("Mass")
+    .setColorBackground(color(58, 76, 100))
+    .setColorForeground(color(158, 182, 206))
+    .setColorActive(color(11, 13, 18))
+    .setColorLabel(color(255))
+    .setMode(ControlP5.SWITCH)
+    ;
+
+
   drawLattice();
+
+  im1 = loadImage("cloth.jpg");
+  im2 = loadImage("silk.jpg");
+  im3 = loadImage("fabric.jpg");
+  im4 = loadImage("mt.png");
+  textureMode(NORMAL);
+
+  textureIm = im1;
 }
 
 
@@ -106,32 +200,45 @@ void setup() {
 
 void draw() {
 
-  //Draw the particles
+  //Background clear
+  emissive(0);
   stroke(0);
   background(color(11, 13, 18));
   fill(color(11, 13, 18));
   rect(2, 2, 1196, 896);
 
+  //Draw the lattice
+  drawLattice();
+  updateParticles(); //Update forces acting on particles and positions according to Euler
+
+
+  //Lights
+  directionalLight(200, 200, 200, 0, 0, -1);
+  ambientLight(255, 255, 255);
+  lightSpecular(255, 255, 255);
+
   //GUI info
+  emissive(0);
   fill(255);
   rect(795, 5, 400, 890);
   fill(color(11, 13, 18));
   textSize(28.7);
   text(s, 850, 60, 350, 100); 
   textSize(12);
-  text(info, 850, 130, 300, 100); 
-  text(instruction, 850, 200, 300, 100); 
-  text(moreInfo, 850, 270, 300, 100); 
-  text("Stiffness", 850, 440, 280, 100); 
-  text("Damping", 850, 500, 280, 100); 
-  text("Mass Size", 850, 380, 280, 100); 
-
+  text(info, 850, 120, 280, 100); 
+  text(instruction, 850, 190, 280, 100); 
+  text(moreInfo, 850, 260, 280, 100); 
+  text("Stiffness", 850, 420, 280, 100); 
+  text("Damping", 850, 480, 280, 100); 
+  text("Mass Size", 850, 360, 280, 100); 
+  text("Wind Strength and Direction", 850, 540, 280, 100); 
+  gui.getController("toggle").setColorBackground(colorT);
+  gui.getController("toggleTexture").setColorBackground(colorT2);
+  gui.getController("toggleMasses").setColorBackground(colorT3);
   textSize(10);
-  text(about, 850, 700, 280, 200); 
+  text(about, 850, 830, 280, 200); 
 
-  stroke(255);
-  drawLattice();
-  updateParticles(); //Update forces acting on particles and positions according to Euler
+  //stroke(255);
 }
 
 
@@ -142,7 +249,7 @@ void createGUI() {
 void createLattice() {
   for (int rows=0; rows<row; rows++) {
     for (int cols=0; cols<col; cols++) {
-      if ((rows == 0 && cols == 0) || rows == 0 && cols == col-1 || (rows == 0 && cols == floor(col/2))) {
+      if ((rows == 0 && cols == 0) || rows == 0 && cols == col-1) {
         theparticles[cols][rows] = new particle(cols, rows, DIST, true);
       } else {
         theparticles[cols][rows] = new particle(cols, rows, DIST, false);
@@ -153,23 +260,55 @@ void createLattice() {
 
 // Draw lattice
 void drawLattice() {
+  shininess(200.0);
+  if (!renderTexture) {
+    fill(255);
+    strokeWeight(1);
+    stroke(255);
+  }
+
   for (int y=0; y<row; y++) {
+    if (renderTexture) {
+      noStroke();
+      noFill();
+      beginShape(QUAD_STRIP);
+      texture(textureIm);
+    }
     for (int x=0; x<col; x++) {
-      if (renderParticles) {
+      if (renderParticles && !renderTexture) {
         theparticles[y][x].display();
       }
-      fill(255);
-      strokeWeight(1);
-      stroke(255);
-      if (x == 0 && y >= 0 && y < row-1) {
-        line(theparticles[y][x].pos.x + offset, theparticles[y][x].pos.y + 100, theparticles[y+1][x].pos.x + offset, theparticles[y+1][x].pos.y + 100);
-      }
-      if (y >= 0 && x >= 1) {        
-        line(theparticles[y][x].pos.x + offset, theparticles[y][x].pos.y + 100, theparticles[y][x-1].pos.x + offset, theparticles[y][x-1].pos.y + 100);  
-        if (y >= 1) {
-          line(theparticles[y][x].pos.x + offset, theparticles[y][x].pos.y + 100, theparticles[y-1][x].pos.x + offset, theparticles[y-1][x].pos.y + 100);
+
+      if (renderTexture) {
+        if (y < row-1 && x != col && y != row-1) {
+          float x1 = theparticles[x][y].pos.x + offsetX;
+          float y1 = theparticles[x][y].pos.y+ offsetY;
+          float u = map(x, 0, col-1, 0, 1);
+          float v1 = map(y, 0, row-1, 0, 1);
+          vertex(x1, y1, u, v1);
+          float x2 = theparticles[x][y+1].pos.x + offsetX;
+          float y2 = theparticles[x][y+1].pos.y+ offsetY;
+          float v2 = map(y+1, 0, row-1, 0, 1);
+          vertex(x2, y2, u, v2);
         }
       }
+
+      if (!renderTexture) {
+        if (x == 0 && y >= 0 && y < row-1) {
+          line(theparticles[y][x].pos.x + offsetX, theparticles[y][x].pos.y+ offsetY, theparticles[y+1][x].pos.x + offsetX, theparticles[y+1][x].pos.y+ offsetY);
+        }
+        if (y >= 0 && x >= 1) {        
+          line(theparticles[y][x].pos.x + offsetX, theparticles[y][x].pos.y+ offsetY, theparticles[y][x-1].pos.x + offsetX, theparticles[y][x-1].pos.y+ offsetY);  
+
+          if (y >= 1) {
+            line(theparticles[y][x].pos.x + offsetX, theparticles[y][x].pos.y+ offsetY, theparticles[y-1][x].pos.x + offsetX, theparticles[y-1][x].pos.y+ offsetY);
+          }
+        }
+      }
+    }
+
+    if (renderTexture) {
+      endShape();
     }
   }
 }
@@ -179,9 +318,12 @@ void updateParticles() {
   PVector fs1, fs2, fs3, fs4, fs5, fs6, fs7, fs8, fb1, fb2, fb3, fb4, fb5, fb6, fb7, fb8, xij;
   float norm_xij, L; 
 
+  float xoff = 0;
   for (int r = 0; r < row; r++) {
-
+    float yoff = 0;
     for (int c = 0; c < col; c++) {
+
+      float nois = noise(xoff, yoff); //Wind noise
 
       // Stiffnes forces
       fs1 = new PVector(0.0, 0.0);
@@ -314,14 +456,24 @@ void updateParticles() {
         fb8 = PVector.mult(n, -damping);
       }
 
+      float windx = map(noise(yoff, xoff), 0, 1, 0, 10);
+      float windy = map(noise(yoff + 3000, xoff+3000), -100, 1, -100, 0);
+      PVector wind = new PVector(0, 0);
+
+      if (windActive)
+        wind = new PVector(windx, windy).mult(windFactor/heavyFactor); 
+
       PVector def = new PVector(0, 0, 0);
       theparticles[c][r].force = def.sub(fs1).sub(fs2).sub(fs3).sub(fs4).sub(fs5).sub(fs6).sub(fs7)
         .sub(fs8).sub(fb1).sub(fb2).sub(fb3).sub(fb4).sub(fb5)
         .sub(fb6).sub(fb7).sub(fb8)
-        .sub(PVector.mult(gravity, mass));
+        .sub(PVector.mult(gravity, mass)).add(wind);
       PVector AirResistance =  new PVector().add(theparticles[c][r].vel).mult(k_air*Area);
       theparticles[c][r].force.add(theparticles[c][r].force).sub(AirResistance); //Add air resistance
+
+      xoff += 10;
     }
+    yoff += 10;
   }
 
   ////Position, velocity, and accelleration update for all nodes
@@ -362,7 +514,7 @@ void mousePressed() {
     PVector mousePos = new PVector(mouseX, mouseY);
     for (int r = 0; r < row; r++) {
       for (int c = 0; c < col; c++) {
-        if (abs(theparticles[c][r].pos.x - mousePos.x + 200) < 15 && abs(theparticles[c][r].pos.y - mousePos.y + 100) < 15) {
+        if (abs(theparticles[c][r].pos.x - mousePos.x + 200) < 15 && abs(theparticles[c][r].pos.y - mousePos.y+ offsetY) < 15) {
           chosenParticle = new PVector(c, r);
           chosen = true;
           return;
@@ -401,6 +553,32 @@ public void Gravity(int g) {
   gravityInfluenceFactor = g;
 }
 
+public void SwitchText() {
+  if (renderTexture) {
+    if (nTextures == 1) {
+      textureIm = im2;
+      nTextures += 1;
+      heavyFactor = 1;
+    } else if (nTextures == 2) {
+      textureIm = im3;
+      nTextures += 1;
+      heavyFactor = 20;
+    } else if (nTextures == 3) {
+      textureIm = im4;
+      nTextures += 1;
+      heavyFactor = 2;
+    } else if (nTextures == 4) {
+      textureIm = im1;
+      nTextures = 1;
+      heavyFactor = 3;
+    }
+  }
+}
+
+public void WindStrength(int w) {
+  windFactor = w;
+}
+
 public void RenderMasses() {
   if (renderParticles == false)
     renderParticles = true;
@@ -408,7 +586,56 @@ public void RenderMasses() {
     renderParticles = false;
 }
 
+public void RenderTexture() {
+  if (renderTexture == false)
+    renderTexture = true;
+  else
+    renderTexture = false;
+}
+
 public void Reset() {
   renderParticles = true;
+  renderTexture = false;
+  windActive = false;
+  windFactor = 0;
+  nTextures = 1;
+  gui.getController("WindStrength").setValue(0);
+  gui.getController("MassSize").setValue(7);
+  gui.getController("Damping").setValue(12);
+  gui.getController("Stiffness").setValue(700);
+  gui.getController("toggle").setValue(0);
+  gui.getController("toggleTexture").setValue(0);
+  gui.getController("toggleMasses").setValue(1);
   settings();
+}
+
+void toggle(boolean theFlag) {
+
+  if (theFlag==true) {
+    windActive = true;
+    colorT = color(42, 117, 28);
+  } else {
+    colorT = color(143, 53, 50);
+    windActive = false;
+  }
+}
+
+void toggleTexture(boolean theFlag) {
+  if (theFlag==true) {
+    renderTexture = true;
+    colorT2 = color(42, 117, 28);
+  } else {
+    colorT2 = color(143, 53, 50);
+    renderTexture = false;
+  }
+}
+
+void toggleMasses(boolean theFlag) {
+  if (theFlag==true) {
+    renderParticles = true;
+    colorT3 = color(42, 117, 28);
+  } else {
+    colorT3 = color(143, 53, 50);
+    renderParticles = false;
+  }
 }

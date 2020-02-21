@@ -31,7 +31,7 @@ class particle {
   //Draw the particle 
   public void display() {
     fill(255);
-    ellipse(this.pos.x+200, this.pos.y+ 100, MASS_SIZE, MASS_SIZE);
+    ellipse(this.pos.x+offsetX, this.pos.y+ offsetY, MASS_SIZE, MASS_SIZE);
   }
 
   PVector getPos() {
