@@ -158,7 +158,7 @@ void drawLattice() {
     }
     for (int x=0; x<col; x++) {
       if (renderParticles && !renderTexture) {
-        theparticles[y][x].display();
+        //theparticles[y][x].display();
       }
 
       if (renderTexture) {
