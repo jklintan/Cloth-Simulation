@@ -2,6 +2,9 @@
 
 // ************************* SETTINGS AND GLOBAL VARIABLE ***************************** //
 
+import controlP5.*;
+import p5;
+
 //Size of window and cloth, note that a square cloth is needed
 int height = 900;
 int width = 1200;
