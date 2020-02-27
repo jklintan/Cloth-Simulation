@@ -2,6 +2,7 @@
 
 // ************************* SETTINGS AND GLOBAL VARIABLE ***************************** //
 
+
 //Size of window and cloth, note that a square cloth is needed
 int height = 900;
 int width = 1200;
@@ -43,8 +44,8 @@ String info = "This is an interactive simulation of a cloth. The calculations ar
 String instruction = "Press and drag with the left mouse button on a mass to move it. Press F to fixate/unfixate a chosen mass.";
 String moreInfo = "Change the values of the spring and damping coefficient in order to change the appearance of the cloth. Note that some values may cause an unstable behavior.";
 String about = "More info can be found at: \nhttp://github.com/jklintan/Cloth-Simulation.";
-import controlP5.*; // import controlP5 library
-ControlP5 gui; // controlP5 object
+//import controlP5.*; // import controlP5 library
+//ControlP5 gui; // controlP5 object
 PImage textureIm, im1, im2, im3, im4;
 int nTextures = 1;
 boolean renderTexture = false;
@@ -117,9 +118,9 @@ void draw() {
   text("Damping", 850, 480, 280, 100); 
   text("Mass Size", 850, 360, 280, 100); 
   text("Wind Strength and Direction", 850, 540, 280, 100); 
-  gui.getController("toggle").setColorBackground(colorT);
-  gui.getController("toggleTexture").setColorBackground(colorT2);
-  gui.getController("toggleMasses").setColorBackground(colorT3);
+  //gui.getController("toggle").setColorBackground(colorT);
+  //gui.getController("toggleTexture").setColorBackground(colorT2);
+  //gui.getController("toggleMasses").setColorBackground(colorT3);
   textSize(10);
   text(about, 850, 830, 280, 200); 
 
@@ -420,125 +421,125 @@ void mouseDragged() {
 
 
 void createGUI() {
-  gui = new ControlP5(this);
-  Button b = gui.addButton("RenderMasses")
-    .setPosition(850, 620)
-    .setLabel("Display Masses")
-    .setColorBackground(color(28, 38, 53))
-    .setColorActive(color(158, 182, 206))
-    .setSize(85, 20)
-    .setLock(true);
+  //gui = new ControlP5(this);
+  //Button b = gui.addButton("RenderMasses")
+  //  .setPosition(850, 620)
+  //  .setLabel("Display Masses")
+  //  .setColorBackground(color(28, 38, 53))
+  //  .setColorActive(color(158, 182, 206))
+  //  .setSize(85, 20)
+  //  .setLock(true);
 
-  Button b2 = gui.addButton("RenderTexture")
-    .setPosition(950, 620)
-    .setLabel("Toggle Texture")
-    .setColorBackground(color(28, 38, 53))
-    .setSize(85, 20)
-    .setLock(true);
+  //Button b2 = gui.addButton("RenderTexture")
+  //  .setPosition(950, 620)
+  //  .setLabel("Toggle Texture")
+  //  .setColorBackground(color(28, 38, 53))
+  //  .setSize(85, 20)
+  //  .setLock(true);
 
-  Button b3 = gui.addButton("WindAdd")
-    .setPosition(1050, 620)
-    .setLabel("Toggle Wind")
-    .setColorBackground(color(28, 38, 53))
-    .setSize(85, 20)
-    .setLock(true);
+  //Button b3 = gui.addButton("WindAdd")
+  //  .setPosition(1050, 620)
+  //  .setLabel("Toggle Wind")
+  //  .setColorBackground(color(28, 38, 53))
+  //  .setSize(85, 20)
+  //  .setLock(true);
 
-  Button toggleText = gui.addButton("SwitchText")
-    .setPosition(950, 700)
-    .setColorActive(color(158, 182, 206))
-    .setColorBackground(color(28, 38, 53))
-    .setLabel("Switch Texture")
-    .setSize(85, 40)
-    .activateBy(ControlP5.PRESS);
+  //Button toggleText = gui.addButton("SwitchText")
+  //  .setPosition(950, 700)
+  //  .setColorActive(color(158, 182, 206))
+  //  .setColorBackground(color(28, 38, 53))
+  //  .setLabel("Switch Texture")
+  //  .setSize(85, 40)
+  //  .activateBy(ControlP5.PRESS);
 
-  Button reset = gui.addButton("Reset")
-    .setPosition(850, 760)
-    .setColorActive(color(158, 182, 206))
-    .setColorBackground(color(11, 13, 18))
-    .setLabel("Reset")
-    .setSize(290, 40)
-    .activateBy(ControlP5.PRESS);
+  //Button reset = gui.addButton("Reset")
+  //  .setPosition(850, 760)
+  //  .setColorActive(color(158, 182, 206))
+  //  .setColorBackground(color(11, 13, 18))
+  //  .setLabel("Reset")
+  //  .setSize(290, 40)
+  //  .activateBy(ControlP5.PRESS);
 
-  gui.addSlider ("MassSize")
-    .setPosition(850, 380)
-    .setSize(285, 30)
-    .setRange(5, 15)
-    .setValue(7)
-    .setColorBackground(color(28, 38, 53))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorValue(255)
-    .setSliderMode(Slider.FLEXIBLE);
+  //gui.addSlider ("MassSize")
+  //  .setPosition(850, 380)
+  //  .setSize(285, 30)
+  //  .setRange(5, 15)
+  //  .setValue(7)
+  //  .setColorBackground(color(28, 38, 53))
+  //  .setColorForeground(color(158, 182, 206))
+  //  .setColorActive(color(11, 13, 18))
+  //  .setColorValue(255)
+  //  .setSliderMode(Slider.FLEXIBLE);
 
-  gui.addSlider ("Stiffness")
-    .setPosition(850, 440)
-    .setSize(285, 30)
-    .setRange(10, 3000)
-    .setValue(700)
-    .setColorBackground(color(28, 38, 53))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorValue(255)
-    .setSliderMode(Slider.FLEXIBLE);
+  //gui.addSlider ("Stiffness")
+  //  .setPosition(850, 440)
+  //  .setSize(285, 30)
+  //  .setRange(10, 3000)
+  //  .setValue(700)
+  //  .setColorBackground(color(28, 38, 53))
+  //  .setColorForeground(color(158, 182, 206))
+  //  .setColorActive(color(11, 13, 18))
+  //  .setColorValue(255)
+  //  .setSliderMode(Slider.FLEXIBLE);
 
-  gui.addSlider ("WindStrength")
-    .setPosition(850, 560)
-    .setSize(285, 30)
-    .setRange(-3000, 3000)
-    .setValue(0)
-    .setLabel("Wind Strength")
-    .setColorBackground(color(28, 38, 53))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorValue(255)
-    .setSliderMode(Slider.FLEXIBLE);
+  //gui.addSlider ("WindStrength")
+  //  .setPosition(850, 560)
+  //  .setSize(285, 30)
+  //  .setRange(-3000, 3000)
+  //  .setValue(0)
+  //  .setLabel("Wind Strength")
+  //  .setColorBackground(color(28, 38, 53))
+  //  .setColorForeground(color(158, 182, 206))
+  //  .setColorActive(color(11, 13, 18))
+  //  .setColorValue(255)
+  //  .setSliderMode(Slider.FLEXIBLE);
 
-  gui.addSlider ("Damping")
-    .setPosition(850, 500)
-    .setSize(285, 30)
-    .setRange(0, 14.9)
-    .setValue(12)
-    .setColorBackground(color(28, 38, 53))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorValue(255)
-    .setSliderMode(Slider.FLEXIBLE);
+  //gui.addSlider ("Damping")
+  //  .setPosition(850, 500)
+  //  .setSize(285, 30)
+  //  .setRange(0, 14.9)
+  //  .setValue(12)
+  //  .setColorBackground(color(28, 38, 53))
+  //  .setColorForeground(color(158, 182, 206))
+  //  .setColorActive(color(11, 13, 18))
+  //  .setColorValue(255)
+  //  .setSliderMode(Slider.FLEXIBLE);
 
-  Toggle t = gui.addToggle("toggle")
-    .setPosition(1050, 650)
-    .setSize(85, 30)
-    .setValue(false)
-    .setLabel("Wind")
-    .setColorBackground(color(58, 76, 100))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorLabel(color(255))
-    .setMode(ControlP5.SWITCH)
-    ;
+  //Toggle t = gui.addToggle("toggle")
+  //  .setPosition(1050, 650)
+  //  .setSize(85, 30)
+  //  .setValue(false)
+  //  .setLabel("Wind")
+  //  .setColorBackground(color(58, 76, 100))
+  //  .setColorForeground(color(158, 182, 206))
+  //  .setColorActive(color(11, 13, 18))
+  //  .setColorLabel(color(255))
+  //  .setMode(ControlP5.SWITCH)
+  //  ;
 
-  Toggle t2 = gui.addToggle("toggleTexture")
-    .setPosition(950, 650)
-    .setSize(85, 30)
-    .setValue(false)
-    .setLabel("Texture")
-    .setColorBackground(color(58, 76, 100))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorLabel(color(255))
-    .setMode(ControlP5.SWITCH)
-    ;
+  //Toggle t2 = gui.addToggle("toggleTexture")
+  //  .setPosition(950, 650)
+  //  .setSize(85, 30)
+  //  .setValue(false)
+  //  .setLabel("Texture")
+  //  .setColorBackground(color(58, 76, 100))
+  //  .setColorForeground(color(158, 182, 206))
+  //  .setColorActive(color(11, 13, 18))
+  //  .setColorLabel(color(255))
+  //  .setMode(ControlP5.SWITCH)
+  //  ;
 
-  Toggle t3 = gui.addToggle("toggleMasses")
-    .setPosition(850, 650)
-    .setSize(85, 30)
-    .setValue(true)
-    .setLabel("Mass")
-    .setColorBackground(color(58, 76, 100))
-    .setColorForeground(color(158, 182, 206))
-    .setColorActive(color(11, 13, 18))
-    .setColorLabel(color(255))
-    .setMode(ControlP5.SWITCH)
-    ;
+  //Toggle t3 = gui.addToggle("toggleMasses")
+  //  .setPosition(850, 650)
+  //  .setSize(85, 30)
+  //  .setValue(true)
+  //  .setLabel("Mass")
+  //  .setColorBackground(color(58, 76, 100))
+  //  .setColorForeground(color(158, 182, 206))
+  //  .setColorActive(color(11, 13, 18))
+  //  .setColorLabel(color(255))
+  //  .setMode(ControlP5.SWITCH)
+  //  ;
 }
 
 
@@ -604,13 +605,13 @@ public void Reset() {
   windActive = false;
   windFactor = 0;
   nTextures = 1;
-  gui.getController("WindStrength").setValue(0);
-  gui.getController("MassSize").setValue(7);
-  gui.getController("Damping").setValue(12);
-  gui.getController("Stiffness").setValue(700);
-  gui.getController("toggle").setValue(0);
-  gui.getController("toggleTexture").setValue(0);
-  gui.getController("toggleMasses").setValue(1);
+  //gui.getController("WindStrength").setValue(0);
+  //gui.getController("MassSize").setValue(7);
+  //gui.getController("Damping").setValue(12);
+  //gui.getController("Stiffness").setValue(700);
+  //gui.getController("toggle").setValue(0);
+  //gui.getController("toggleTexture").setValue(0);
+  //gui.getController("toggleMasses").setValue(1);
   settings();
 }
 
