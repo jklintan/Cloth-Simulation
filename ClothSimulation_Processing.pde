@@ -150,6 +150,7 @@ void drawLattice() {
   }
 
   for (int y=0; y<row; y++) {
+
     if (renderTexture) {
       noStroke();
       noFill();
@@ -157,6 +158,7 @@ void drawLattice() {
       texture(textureIm);
     }
     for (int x=0; x<col; x++) {
+      if(theparticles[y][x].pos != null){
       if (renderParticles && !renderTexture) {
         //theparticles[y][x].display();
       }
@@ -186,6 +188,7 @@ void drawLattice() {
             line(theparticles[y][x].pos.x + offsetX, theparticles[y][x].pos.y+ offsetY, theparticles[y-1][x].pos.x + offsetX, theparticles[y-1][x].pos.y+ offsetY);
           }
         }
+      }
       }
     }
 
@@ -661,8 +664,8 @@ class particle {
   particle(int row, int col, int dist, boolean fix) {
     this.index.set(row, col);
     this.initialpos.set((row-1)*dist, (col-1)*dist, 0.0);
-    this.pos.set(this.initialpos);
-    this.oldpos.set(this.initialpos);
+    this.pos.set(0, 0, 0);
+    this.oldpos.set(0, 0, 0);
     this.isfixed = fix;
     this.force.set(0, 0, 0);
     this.vel.set(0, 0, 0);
