@@ -65,10 +65,10 @@ for c = 1: col
     for r = 1 : row
         particle(r,c).initalPos = [(c - 1)*distanceParticles (r - 1)*distanceParticles ]; 
         particle(r,c).pos = particle(r,c).initalPos;
-        particle(r,c).pos_old = particle(r,c).pos; % Used for Verlet integration
+        particle(r,c).oldpos = particle(r,c).pos; % Used for Verlet integration
         particle(r,c).acc = [0 0];
         particle(r,c).vel = [0 0];
-        particle(r,c).force_ext = [0 0];
+        particle(r,c).force = [0 0];
         
         if(sim == 1)
             if (r == 1)
@@ -123,20 +123,20 @@ elseif(sim == 3)
     ylim([-0.4 0.4]) %For fixed square
 end
 
-latticePlot = drawNodes(PlotWindow, plot, lattice, 0);
+latticePlot = drawLattice(PlotWindow, plot, lattice, 0);
 
 %% Main loop
 for i = 0 : timelim
 
-    %Update the position of the nodes
-    lattice = updateNode(lattice, mass, stiffness, damping, ts, method);
+    %Update the position of the particles
+    lattice = updateParticles(lattice, mass, stiffness, damping, ts, method);
     
-    %Draw the nodes in the plot
-    latticePlot = drawNodes(PlotWindow, latticePlot, lattice, ts);
+    %Draw the particles 
+    latticePlot = drawLattice(PlotWindow, latticePlot, lattice, ts);
 end
 
 %% Draw the nodes
-function plot = drawNodes(PlotWindow, plot, lattice, timestep)
+function plot = drawLattice(PlotWindow, plot, lattice, timestep)
 i = 1;
 
 for c = 1 : lattice.col
@@ -164,7 +164,7 @@ end
 
 %% Update the position of each node
 
-function lattice = updateNode(lattice, mass, stiffness, damping, ts, method)
+function lattice = updateParticles(lattice, mass, stiffness, damping, ts, method)
 
     row = lattice.row;
     col = lattice.col;
@@ -277,7 +277,7 @@ function lattice = updateNode(lattice, mass, stiffness, damping, ts, method)
                     particle(r,c).pos = Euler(particle(r,c).pos, particle(r,c).vel, ts); 
                 else
                     % Verlet method for updating position and velocity
-                    [particle(r,c).pos_old, particle(r,c).pos, particle(r,c).vel] = Verlet(particle(r,c).pos, particle(r,c).pos_old, particle(r,c).acc, ts);
+                    [particle(r,c).oldpos, particle(r,c).pos, particle(r,c).vel] = Verlet(particle(r,c).pos, particle(r,c).oldpos, particle(r,c).acc, ts);
             
                 end
             end
