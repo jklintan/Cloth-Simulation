@@ -112,7 +112,7 @@ void setup() {
   //createGUI();
 
   //Draw the lattice
-  drawLattice();
+  //drawLattice();
 
   //Textures
   im1 = loadImage("cloth.jpg");
