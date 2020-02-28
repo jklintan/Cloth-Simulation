@@ -19,6 +19,7 @@ p, a, li {
 }
 
 canvas{
+	margin: auto !important;
 	width: 1200px !important;
 	height: 900px !important;
 }
