@@ -124,7 +124,7 @@ function setup() {
   }
 
   button = createButton("Display Masses");
-  button.position(850, 620);
+  button.position(850, 650);
   button.mousePressed(RenderMasses);
   button.style('background-color: green');
   button.style('color: white');
@@ -148,7 +148,7 @@ function setup() {
   // button2.style('text-align: 12px');
   
   button3 = createButton("Toggle wind");
-  button3.position(950, 620);
+  button3.position(950, 650);
   button3.mousePressed(toggle);
   button3.style('background-color: red');
   button3.style('color: white');
@@ -166,7 +166,7 @@ function setup() {
   // button4.style('text-align: 12px');
   
   reset = createButton("Reset");
-  reset.position(1050, 620);
+  reset.position(1050, 650);
   reset.mousePressed(Reset);
   reset.style('background-color: rgb(28, 38, 53)');
   reset.style('color: white');
@@ -175,12 +175,12 @@ function setup() {
   reset.style('text-align: 12px');
 
   massSlider = createSlider(5, 15, 7);
-  massSlider.position(850, 375);
+  massSlider.position(850, 370);
   massSlider.style('height: 30px');
   massSlider.style('width: 285px');
 
   dampingSlider = createSlider(0, 14.9, 12);
-  dampingSlider.position(850, 490);
+  dampingSlider.position(850, 495);
   dampingSlider.style('height: 30px');
   dampingSlider.style('width: 285px');
 
@@ -190,11 +190,9 @@ function setup() {
   stiffnessSlider.style('width: 285px');
 
   windSlider = createSlider(-3000, 3000, 0);
-  windSlider.position(850, 555);
+  windSlider.position(850, 560);
   windSlider.style('height: 30px');
   windSlider.style('width: 285px');
-
-
 }
 
 //****************************** RENDERING LOOP ******************************* //
