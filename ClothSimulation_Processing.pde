@@ -202,7 +202,7 @@ void drawLattice() {
     for (int x=0; x<col; x++) {
       if(theparticles[y][x].pos == null){
         background(color(255, 255, 255));
-      }
+      }else{
         if (renderParticles && !renderTexture) {
           //theparticles[y][x].display();
         }
