@@ -41,8 +41,6 @@ var instruction = "Press and drag with the left mouse button on a mass to move i
 var moreInfo = "Change the values of the spring and damping coefficient in order to change the appearance of the cloth. Note that some values may cause an unstable behavior.";
 var about = "More info can be found at: \nhttp://github.com/jklvaran/Cloth-Simulation.";
 
-
-
 var textureIm;
 var im1; 
 var im2;
@@ -108,7 +106,7 @@ function settings(){
    
 
 function setup() {
-  createCanvas(1200, 800);
+  createCanvas(windowWidth, windowHeight);
 
   for(var i = 0; i < row; i++){
     for(var j = 0; j < col; j++){
@@ -124,7 +122,7 @@ function setup() {
   }
 
   button = createButton("Display Masses");
-  button.position(850, 650);
+  button.position(windowWidth-450, windowHeight*0.85);
   button.mousePressed(RenderMasses);
   button.style('background-color: green');
   button.style('color: white');
@@ -148,7 +146,7 @@ function setup() {
   // button2.style('text-align: 12px');
   
   button3 = createButton("Toggle wind");
-  button3.position(950, 650);
+  button3.position(windowWidth-350, windowHeight*0.85);
   button3.mousePressed(toggle);
   button3.style('background-color: red');
   button3.style('color: white');
@@ -166,7 +164,7 @@ function setup() {
   // button4.style('text-align: 12px');
   
   reset = createButton("Reset");
-  reset.position(1050, 650);
+  reset.position(windowWidth-250, windowHeight*0.85);
   reset.mousePressed(Reset);
   reset.style('background-color: rgb(28, 38, 53)');
   reset.style('color: white');
@@ -175,22 +173,22 @@ function setup() {
   reset.style('text-align: 12px');
 
   massSlider = createSlider(5, 15, 7);
-  massSlider.position(850, 370);
+  massSlider.position(windowWidth-450, windowHeight*0.47);
   massSlider.style('height: 30px');
   massSlider.style('width: 285px');
 
   dampingSlider = createSlider(0, 14.9, 12);
-  dampingSlider.position(850, 510);
+  dampingSlider.position(windowWidth-450,  windowHeight*0.67);
   dampingSlider.style('height: 30px');
   dampingSlider.style('width: 285px');
 
   stiffnessSlider = createSlider(10, 3000, 700);
-  stiffnessSlider.position(850, 440);
+  stiffnessSlider.position(windowWidth-450,  windowHeight*0.57);
   stiffnessSlider.style('height: 30px');
   stiffnessSlider.style('width: 285px');
 
   windSlider = createSlider(-3000, 3000, 0);
-  windSlider.position(850, 580);
+  windSlider.position(windowWidth-450,  windowHeight*0.77);
   windSlider.style('height: 30px');
   windSlider.style('width: 285px');
 }
@@ -224,23 +222,23 @@ function draw() {
   //GUI info
   //emissive(0);
   fill(255);
-  rect(795, 5, 400, 890);
+  rect(windowWidth-500, 0, 400, windowHeight);
   fill(color(11, 13, 18));
   textSize(28.7);
-  text(s, 850, 60, 350, 100); 
+  text(s, windowWidth-450, windowHeight*0.05, 350, 100); 
   textSize(12);
-  text(info, 850, 120, 280, 100); 
-  text(instruction, 850, 190, 280, 100); 
-  text(moreInfo, 850, 260, 280, 100); 
-  text("Stiffness", 850, 420, 280, 100); 
-  text("Damping", 850, 480, 280, 100); 
-  text("Mass Size", 850, 360, 280, 100); 
-  text("Wind Strength and Direction", 850, 540, 280, 100); 
+  text(info, windowWidth-450, windowHeight*0.12, 280, 100); 
+  text(instruction, windowWidth-450, windowHeight*0.22, 280, 100); 
+  text(moreInfo, windowWidth-450, windowHeight*0.32, 280, 100); 
+  text("Stiffness", windowWidth-450, windowHeight*0.55, 280, 100); 
+  text("Damping", windowWidth-450, windowHeight*0.65, 280, 100); 
+  text("Mass Size", windowWidth-450, windowHeight*0.45, 280, 100); 
+  text("Wind Strength and Direction", windowWidth-450, windowHeight*0.75, 280, 100); 
   //gui.getController("toggle").setColorBackground(colorT);
   //gui.getController("toggleTexture").setColorBackground(colorT2);
   //gui.getController("toggleMasses").setColorBackground(colorT3);
   textSize(10);
-  text(about, 850, 830, 280, 200); 
+  text(about, windowWidth-450, windowHeight*0.95, 280, 200); 
 
   stroke(255);
 }
@@ -651,13 +649,14 @@ function Reset() {
   windActive = false;
   windFactor = 0;
   nTextures = 1;
-  //gui.getController("WindStrength").setValue(0);
-  //gui.getController("MassSize").setValue(7);
-  //gui.getController("Damping").setValue(12);
-  //gui.getController("Stiffness").setValue(700);
-  //gui.getController("toggle").setValue(0);
-  //gui.getController("toggleTexture").setValue(0);
-  //gui.getController("toggleMasses").setValue(1);
+  windSlider.value(0);
+  massSlider.value(7);
+  dampingSlider.value(12);
+  stiffnessSlider.value(700);
+  button.style('background-color: green');
+  RenderMasses = true;
+  button3.style('background-color: red');
+  windActive = false;
   settings();
 }
 
