@@ -56,7 +56,7 @@ int offsetX = 200;
 int offsetY = 100;
 int DIST = 30;
 int MASS_SIZE = 7;
-particle[][] theparticles; //Array for storing the particles in the grid
+particle[][] theparticles = new particle[row][col]; //Array for storing the particles in the grid
 
 //Simulation constants
 float stiffness = -700;
