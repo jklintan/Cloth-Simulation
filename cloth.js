@@ -180,17 +180,17 @@ function setup() {
   massSlider.style('width: 285px');
 
   dampingSlider = createSlider(0, 14.9, 12);
-  dampingSlider.position(850, 495);
+  dampingSlider.position(850, 510);
   dampingSlider.style('height: 30px');
   dampingSlider.style('width: 285px');
 
   stiffnessSlider = createSlider(10, 3000, 700);
-  stiffnessSlider.position(850, 430);
+  stiffnessSlider.position(850, 440);
   stiffnessSlider.style('height: 30px');
   stiffnessSlider.style('width: 285px');
 
   windSlider = createSlider(-3000, 3000, 0);
-  windSlider.position(850, 560);
+  windSlider.position(850, 580);
   windSlider.style('height: 30px');
   windSlider.style('width: 285px');
 }
