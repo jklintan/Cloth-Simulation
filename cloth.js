@@ -36,7 +36,7 @@ var windFactor = 0;
 // Background and GUI
 var renderBackground = false;
 var s = "CLOTH SIMULATION";
-var info = "This is an vareractive simulation of a cloth. The calculations are based on a var-damper system that is solved using Euler's method";
+var info = "This is an interactive simulation of a cloth. The calculations are based on a spring-damper system that is solved using Euler's method";
 var instruction = "Press and drag with the left mouse button on a mass to move it. Press TAB to fixate/unfixate a chosen mass.";
 var moreInfo = "Change the values of the spring and damping coefficient in order to change the appearance of the cloth. Note that some values may cause an unstable behavior.";
 var about = "More info can be found at: \nhttp://github.com/jklvaran/Cloth-Simulation.";
