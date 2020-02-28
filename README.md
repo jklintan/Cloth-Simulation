@@ -1,16 +1,6 @@
 # Cloth Simulation
 This is a simulation implementing a cloth simulation. The project was first implemented using Matlab and then using Processing. 
 
-## Requirements
-
-The following additional toolboxes are required to run the program in Matlab:
-
-| Name                                    | 
-| --------------------------------------- | 
-| Navigation Toolbox                      | 
-| Database Toolbox                        |
-
-
 ## Matlab
 
 The core of the cloth model is a system of spring dampers. The model is built upon a structured lattice that consist of particles with a finite mass that are connected to each other by spring-dampers. The spring-damper generates a force on each particle based on its position and velocity. 
@@ -39,7 +29,7 @@ Each mass in the cloth is affected by 3 to 8 spring forces and 3 to 8 damping fo
 
 ## Processing Implementation
 
-The next approach for the simulation was to take it out of Matlab and implement in a graphical way. The group chose to work with Processing in order to obtain a simple way to create a rendering window. The code from the 2D-implementation in matlab was successfully implemented in Processing with a class called particle to represent the nodes in Matlab. 
+The next approach for the simulation was to take it out of Matlab and implement in a graphical way. The group chose to work with Processing in order to obtain a simple way to create a rendering window. The code from the 2D-implementation in matlab was successfully implemented in Processing with a class called particle to represent the particles created in Matlab. 
 
 A GUI and user interaction for allowing the user to change parameters of the cloth and to drag masses over the screen as well as fixating certain masses was added. The result from the final demo can be seen below: 
 
@@ -64,5 +54,5 @@ Wind is implemented with the use of adding two different noises that are mapped 
 
 ## Sources and attribution
 
-The 2D plot of the spring-damper system is built upon the approach of Auralius Manurung's [Matlab Project of a Deformable Object](https://www.mathworks.com/matlabcentral/fileexchange/52931-deformable-object-with-interconnected-mass-spring-damper) that uses the nodes system from the navigation toolbox in Matlab to represent the masses in the lattice. 
+The 2D plot of the spring-damper system is built upon the approach of Auralius Manurung's [Matlab Project of a Deformable Object](https://www.mathworks.com/matlabcentral/fileexchange/52931-deformable-object-with-interconnected-mass-spring-damper). 
 
