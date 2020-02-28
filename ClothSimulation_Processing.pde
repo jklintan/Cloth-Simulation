@@ -1,7 +1,49 @@
 //Interactive Cloth simulation
 
-// ************************* SETTINGS AND GLOBAL VARIABLE ***************************** //
+// ************************* PARTICLE CLASS ***************************** //
 
+class particle {
+  float mass = 0.1;
+  PVector pos = new PVector(0.0, 0.0, 0.0);
+  PVector oldpos = new PVector(0.0, 0.0, 0.0);
+  PVector initialpos = new PVector(0.0, 0.0, 0.0);
+  PVector vel = new PVector(0.0, 0.0, 0.0);
+  PVector acc = new PVector(0.0, 0.0, 0.0);
+  PVector force = new PVector(0.0, 0.0, 0.0);
+  boolean isfixed = false;
+  PVector index = new PVector(0.0, 0.0);
+
+  //Constructor
+  particle(int row, int col, int dist, boolean fix) {
+    this.index.set(row, col);
+    this.initialpos.set((row-1)*dist, (col-1)*dist, 0.0);
+    this.pos.set(0, 0, 0);
+    this.oldpos.set(0, 0, 0);
+    this.isfixed = fix;
+    this.force.set(0, 0, 0);
+    this.vel.set(0, 0, 0);
+  }
+
+  boolean isFixed() {
+    return this.isfixed;
+  }
+
+  void setPos(float x, float y) {
+    this.pos.set(x, y);
+  }
+
+  //Draw the particle 
+  public void display() {
+    fill(255);
+    ellipse(this.pos.x+offsetX, this.pos.y+ offsetY, MASS_SIZE, MASS_SIZE);
+  }
+
+  PVector getPos() {
+    return this.pos;
+  }
+}
+
+// ************************* SETTINGS AND GLOBAL VARIABLE ***************************** //
 
 //Size of window and cloth, note that a square cloth is needed
 int height = 900;
@@ -70,7 +112,7 @@ void setup() {
   //createGUI();
 
   //Draw the lattice
-  //drawLattice();
+  drawLattice();
 
   //Textures
   im1 = loadImage("cloth.jpg");
@@ -649,43 +691,4 @@ void toggleMasses(boolean theFlag) {
   }
 }
 
-class particle {
-  float mass = 0.1;
-  PVector pos = new PVector(0.0, 0.0, 0.0);
-  PVector oldpos = new PVector(0.0, 0.0, 0.0);
-  PVector initialpos = new PVector(0.0, 0.0, 0.0);
-  PVector vel = new PVector(0.0, 0.0, 0.0);
-  PVector acc = new PVector(0.0, 0.0, 0.0);
-  PVector force = new PVector(0.0, 0.0, 0.0);
-  boolean isfixed = false;
-  PVector index = new PVector(0.0, 0.0);
 
-  //Constructor
-  particle(int row, int col, int dist, boolean fix) {
-    this.index.set(row, col);
-    this.initialpos.set((row-1)*dist, (col-1)*dist, 0.0);
-    this.pos.set(0, 0, 0);
-    this.oldpos.set(0, 0, 0);
-    this.isfixed = fix;
-    this.force.set(0, 0, 0);
-    this.vel.set(0, 0, 0);
-  }
-
-  boolean isFixed() {
-    return this.isfixed;
-  }
-
-  void setPos(float x, float y) {
-    this.pos.set(x, y);
-  }
-
-  //Draw the particle 
-  public void display() {
-    fill(255);
-    ellipse(this.pos.x+offsetX, this.pos.y+ offsetY, MASS_SIZE, MASS_SIZE);
-  }
-
-  PVector getPos() {
-    return this.pos;
-  }
-}
