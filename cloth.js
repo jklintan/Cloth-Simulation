@@ -206,8 +206,6 @@ function draw() {
   damping = -(15-dampingSlider.value());
   stiffness = - stiffnessSlider.value();
 
-  console.log(windActive)
-
   //Background clear
   //emissive(0);
   stroke(0);
@@ -666,7 +664,6 @@ function Reset() {
 }
 
 function toggle() {
-  console.log("HELLO WIND")
 
   if(windActive == true){
     windActive = false;
@@ -675,14 +672,6 @@ function toggle() {
     windActive =true;
     button3.style('background-color: green')
   }
-  console.log(windActive)
-  // if (theFlag==true) {
-  //   windActive = true;
-  //   colorT = color(42, 117, 28);
-  // } else {
-  //   colorT = color(143, 53, 50);
-  //   windActive = false;
-  // }
 }
 
 function toggleTexture(theFlag) {
