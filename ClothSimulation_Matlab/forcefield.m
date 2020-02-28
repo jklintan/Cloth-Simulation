@@ -1,4 +1,4 @@
-function [newPositions] = forcefield(t,dt,step,plane,ks,kd,R,m)
+function [newPositions] = forcefield(t,dt,step,plane,ks,kd,R,m, airRes)
 %   Beräknar nya positioner [newPositions] för alla punkter, samt lagrar en iteration
 %   bakåt av geometrin. Beräknas med Verletintegration.
 
@@ -23,7 +23,7 @@ counterY = 1;
                 totPointForce = 0;
                 
             else
-                 totPointForce = applyForceKernel(paddedPlane,i,j,ks,kd,R,m);
+                 totPointForce = applyForceKernel(paddedPlane,i,j,ks,kd,R,m, airRes);
             
                 a = totPointForce/m;
             
