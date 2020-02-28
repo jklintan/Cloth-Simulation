@@ -18,6 +18,11 @@ p, a, li {
 	text-decoration: none;
 }
 
+canvas{
+	width: 1200px !important;
+	height: 900px !important;
+}
+
 a {
 	font-weight: bold;
 }
