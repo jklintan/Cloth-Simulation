@@ -67,10 +67,10 @@ void setup() {
   frameRate(60);
 
   //Interactive GUI menu
-  createGUI();
+  //createGUI();
 
   //Draw the lattice
-  drawLattice();
+  //drawLattice();
 
   //Textures
   im1 = loadImage("cloth.jpg");
@@ -94,8 +94,8 @@ void draw() {
   rect(2, 2, 1196, 896);
 
   //Draw the lattice
-  drawLattice();
-  updateParticles(); //Update forces acting on particles and positions according to Euler
+  //drawLattice();
+  //updateParticles(); //Update forces acting on particles and positions according to Euler
 
 
   //Lights
