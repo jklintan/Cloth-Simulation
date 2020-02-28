@@ -17,11 +17,11 @@ class particle {
   particle(int row, int col, int dist, boolean fix) {
     this.index.set(row, col);
     this.initialpos.set((row-1)*dist, (col-1)*dist, 0.0);
-    this.pos.set(0, 0, 0);
-    this.oldpos.set(0, 0, 0);
+    this.pos.set(new PVector(0.0, 0.0, 0.0));
+    this.oldpos.set(new PVector(0.0, 0.0, 0.0));
     this.isfixed = fix;
-    this.force.set(0, 0, 0);
-    this.vel.set(0, 0, 0);
+    this.force.set(new PVector(0.0, 0.0, 0.0));
+    this.vel.set(new PVector(0.0, 0.0, 0.0));
   }
 
   boolean isFixed() {
