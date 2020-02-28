@@ -112,7 +112,7 @@ void setup() {
   //createGUI();
 
   //Draw the lattice
-  //drawLattice();
+  drawLattice();
 
   //Textures
   im1 = loadImage("cloth.jpg");
@@ -200,36 +200,38 @@ void drawLattice() {
       texture(textureIm);
     }
     for (int x=0; x<col; x++) {
-      if(theparticles[y][x].pos != null){
-      if (renderParticles && !renderTexture) {
-        //theparticles[y][x].display();
+      if(theparticles[y][x].pos == null){
+        background(color(255, 255, 255));
       }
-
-      if (renderTexture) {
-        if (y < row-1 && x != col && y != row-1) {
-          float x1 = theparticles[x][y].pos.x + offsetX;
-          float y1 = theparticles[x][y].pos.y+ offsetY;
-          float u = map(x, 0, col-1, 0, 1);
-          float v1 = map(y, 0, row-1, 0, 1);
-          vertex(x1, y1, u, v1);
-          float x2 = theparticles[x][y+1].pos.x + offsetX;
-          float y2 = theparticles[x][y+1].pos.y+ offsetY;
-          float v2 = map(y+1, 0, row-1, 0, 1);
-          vertex(x2, y2, u, v2);
+        if (renderParticles && !renderTexture) {
+          //theparticles[y][x].display();
         }
-      }
 
-      if (!renderTexture) {
-        if (x == 0 && y >= 0 && y < row-1) {
-          line(theparticles[y][x].pos.x + offsetX, theparticles[y][x].pos.y+ offsetY, theparticles[y+1][x].pos.x + offsetX, theparticles[y+1][x].pos.y+ offsetY);
-        }
-        if (y >= 0 && x >= 1) {        
-          line(theparticles[y][x].pos.x + offsetX, theparticles[y][x].pos.y+ offsetY, theparticles[y][x-1].pos.x + offsetX, theparticles[y][x-1].pos.y+ offsetY);  
-
-          if (y >= 1) {
-            line(theparticles[y][x].pos.x + offsetX, theparticles[y][x].pos.y+ offsetY, theparticles[y-1][x].pos.x + offsetX, theparticles[y-1][x].pos.y+ offsetY);
+        if (renderTexture) {
+          if (y < row-1 && x != col && y != row-1) {
+            float x1 = theparticles[x][y].pos.x + offsetX;
+            float y1 = theparticles[x][y].pos.y+ offsetY;
+            float u = map(x, 0, col-1, 0, 1);
+            float v1 = map(y, 0, row-1, 0, 1);
+            vertex(x1, y1, u, v1);
+            float x2 = theparticles[x][y+1].pos.x + offsetX;
+            float y2 = theparticles[x][y+1].pos.y+ offsetY;
+            float v2 = map(y+1, 0, row-1, 0, 1);
+            vertex(x2, y2, u, v2);
           }
         }
+
+        if (!renderTexture) {
+          if (x == 0 && y >= 0 && y < row-1) {
+            line(theparticles[y][x].pos.x + offsetX, theparticles[y][x].pos.y+ offsetY, theparticles[y+1][x].pos.x + offsetX, theparticles[y+1][x].pos.y+ offsetY);
+          }
+          if (y >= 0 && x >= 1) {        
+            line(theparticles[y][x].pos.x + offsetX, theparticles[y][x].pos.y+ offsetY, theparticles[y][x-1].pos.x + offsetX, theparticles[y][x-1].pos.y+ offsetY);  
+
+            if (y >= 1) {
+              line(theparticles[y][x].pos.x + offsetX, theparticles[y][x].pos.y+ offsetY, theparticles[y-1][x].pos.x + offsetX, theparticles[y-1][x].pos.y+ offsetY);
+            }
+          }
       }
       }
     }
