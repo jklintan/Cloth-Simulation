@@ -3,45 +3,35 @@
 // ************************* PARTICLE CLASS ***************************** //
 
 class particle {
-  float mass = 0.1;
-  PVector pos = new PVector(0.0, 0.0, 0.0);
-  PVector oldpos = new PVector(0.0, 0.0, 0.0);
-  PVector initialpos = new PVector(0.0, 0.0, 0.0);
-  PVector vel = new PVector(0.0, 0.0, 0.0);
-  PVector acc = new PVector(0.0, 0.0, 0.0);
-  PVector force = new PVector(0.0, 0.0, 0.0);
-  boolean isfixed = false;
-  PVector index = new PVector(0.0, 0.0);
 
   //Constructor
-  particle(int row, int col, int dist, boolean fix) {
-    this.index.set(row, col);
-    this.initialpos.set((row-1)*dist, (col-1)*dist, 0.0);
-    this.pos.set(new PVector(0.0, 0.0, 0.0));
-    this.oldpos.set(new PVector(0.0, 0.0, 0.0));
+  constructor(row, col, dist, fix) {
+    this.index = [row, col];
+    this.initialpos = [(row-1)*dist, (col-1)*dist, 0.0];
+    this.pos = (this.initialpos);
+    this.oldpos = (this.initialpos);
     this.isfixed = fix;
-    this.force.set(new PVector(0.0, 0.0, 0.0));
-    this.vel.set(new PVector(0.0, 0.0, 0.0));
+    this.force = [0, 0, 0];
+    this.vel = [0, 0, 0];
   }
 
-  boolean isFixed() {
+  isFixed() {
     return this.isfixed;
   }
 
-  void setPos(float x, float y) {
+  setPos(x, y) {
     this.pos.set(x, y);
   }
 
   //Draw the particle 
-  public void display() {
+  display() {
     fill(255);
-    ellipse(this.pos.x+offsetX, this.pos.y+ offsetY, MASS_SIZE, MASS_SIZE);
+    ellipse(this.pos[0]+offsetX, this.pos[1]+ offsetY, MASS_SIZE, MASS_SIZE);
   }
 
-  PVector getPos() {
+  getPos() {
     return this.pos;
   }
-}
 
 // ************************* SETTINGS AND GLOBAL VARIABLE ***************************** //
 
