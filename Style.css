@@ -20,24 +20,7 @@ p, a, li {
 	text-decoration: none;
 }
 
-input{
-	margin-top: 160px;
-	margin-left: 100px;
-	
-}
 
-button{
-	margin-top:150px;
-	margin-left: 100px;
-}
-
-canvas{
-	margin: 100px !important;
-	
-	width: 1199px !important;
-	height: 899px !important;
-	border: 5px solid black;
-}
 
 a {
 	font-weight: bold;
