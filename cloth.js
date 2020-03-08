@@ -10,7 +10,6 @@ var offsetX = 200;
 var offsetY = 100;
 var DIST = 30;
 var MASS_SIZE = 7;
- //Array for storing the particles in the grid
 
 //Simulation constants
 var stiffness = -700;
@@ -29,14 +28,11 @@ var renderParticles = true;
 // Wind
 var windActive;
 var windFactor = 0;
-//var colorT = new color(255);
-//var colorT2 = color(255);
-//var colorT3 = color(255);
 
 // Background and GUI
 var renderBackground = false;
 var s = "CLOTH SIMULATION";
-var info = "This is an interactive simulation of a cloth. The calculations are based on a spring-damper system that is solved using Euler's method";
+var info = "This is an vareractive simulation of a cloth. The calculations are based on a var-damper system that is solved using Euler's method";
 var instruction = "Press and drag with the left mouse button on a mass to move it. Press TAB to fixate/unfixate a chosen mass.";
 var moreInfo = "Change the values of the spring and damping coefficient in order to change the appearance of the cloth. Note that some values may cause an unstable behavior.";
 var about = "More info can be found at: \nhttp://github.com/jklvaran/Cloth-Simulation.";
@@ -51,6 +47,8 @@ var renderTexture = false;
 var heavyFactor = 3;
 
 let massSlider, dampingSlider, stiffnessSlider, windSlider;
+
+//************************** PARTICLE CLASS ******************************* //
 
 class particle {
 
@@ -84,10 +82,16 @@ class particle {
   }
 }
 
+// Storing of the particle
 var k = 0;
 var theparticles = []
 
+
+//************************** SETUP FUNCTIONS ******************************* //
+
 function settings(){
+
+  //Initialize the grid of particles
   theparticles = [];
   for(var i = 0; i < row; i++){
     for(var j = 0; j < col; j++){
@@ -100,8 +104,7 @@ function settings(){
       }
 
     }
-
-}
+  }
 }
    
 
@@ -117,51 +120,27 @@ function setup() {
         theparticles.push(new particle(j, i, DIST, false));
         k = k + 1;
       }
-
     }
   }
 
-  button = createButton("Display Masses");
-  button.position(windowWidth-450, windowHeight*0.85);
-  button.mousePressed(RenderMasses);
-  button.style('background-color: green');
-  button.style('color: white');
-  button.style('height: 40px');
-  button.style('width: 85px');
-  button.style('text-align: 12px');
+  // GUI BUTTONS AND SLIDERS
+  buttonDispMass = createButton("Display Masses");
+  buttonDispMass.position(windowWidth-450, windowHeight*0.85);
+  buttonDispMass.mousePressed(RenderMasses);
+  buttonDispMass.style('background-color: green');
+  buttonDispMass.style('color: white');
+  buttonDispMass.style('height: 40px');
+  buttonDispMass.style('width: 85px');
+  buttonDispMass.style('text-align: 12px');
 
-  //  .setLabel("Display Masses")
-  // .setColorBackground(color(28, 38, 53))
-  //  .setColorActive(color(158, 182, 206))
-  //  .setSize(85, 20)
-  //  .setLock(true);
-  
-  // button2 = createButton("Render Texture");
-  // button2.position(950, 620);
-  // button2.mousePressed(RenderTexture);
-  // button2.style('background-color: rgb(28, 38, 53)');
-  // button2.style('color: white');
-  // button2.style('height: 40px');
-  // button2.style('width: 85px');
-  // button2.style('text-align: 12px');
-  
-  button3 = createButton("Toggle wind");
-  button3.position(windowWidth-350, windowHeight*0.85);
-  button3.mousePressed(toggle);
-  button3.style('background-color: red');
-  button3.style('color: white');
-  button3.style('height: 40px');
-  button3.style('width: 85px');
-  button3.style('text-align: 12px');
-  
-  // button4 = createButton("Switch Texture");
-  // button4.position(950, 700);
-  // button4.mousePressed(SwitchText);
-  // button4.style('background-color: rgb(28, 38, 53)');
-  // button4.style('color: white');
-  // button4.style('height: 40px');
-  // button4.style('width: 85px');
-  // button4.style('text-align: 12px');
+  buttonWind = createButton("Toggle wind");
+  buttonWind.position(windowWidth-350, windowHeight*0.85);
+  buttonWind.mousePressed(toggle);
+  buttonWind.style('background-color: red');
+  buttonWind.style('color: white');
+  buttonWind.style('height: 40px');
+  buttonWind.style('width: 85px');
+  buttonWind.style('text-align: 12px');
   
   reset = createButton("Reset");
   reset.position(windowWidth-250, windowHeight*0.85);
@@ -203,7 +182,6 @@ function draw() {
   stiffness = - stiffnessSlider.value();
 
   //Background clear
-  //emissive(0);
   stroke(0);
   background(color(11, 13, 18));
   fill(color(11, 13, 18));
@@ -213,14 +191,7 @@ function draw() {
   theparticles = drawLattice(theparticles);
   theparticles = updateParticles(theparticles); //Update forces acting on particles and positions according to Euler
 
-
-  //Lights
-  //directionalLight(200, 200, 200, 0, 0, -1);
-  //ambientLight(255, 255, 255);
-  //lightSpecular(255, 255, 255);
-
   //GUI info
-  //emissive(0);
   fill(255);
   rect(windowWidth-500, 0, 400, windowHeight);
   fill(color(11, 13, 18));
@@ -234,9 +205,6 @@ function draw() {
   text("Damping", windowWidth-450, windowHeight*0.65, 280, 100); 
   text("Mass Size", windowWidth-450, windowHeight*0.45, 280, 100); 
   text("Wind Strength and Direction", windowWidth-450, windowHeight*0.75, 280, 100); 
-  //gui.getController("toggle").setColorBackground(colorT);
-  //gui.getController("toggleTexture").setColorBackground(colorT2);
-  //gui.getController("toggleMasses").setColorBackground(colorT3);
   textSize(10);
   text(about, windowWidth-450, windowHeight*0.95, 280, 200); 
 
@@ -534,7 +502,7 @@ function xtEuler(xt, xtPrim,  h) {
   return xt + h*xtPrim;
 }
 
-//**************************  USER varERACTION ********************************//
+//**************************  USER INTERACTION ********************************//
 
 //Fix and unfix particles
 function keyPressed() {
@@ -577,12 +545,7 @@ function mouseDragged() {
   }
 }
 
-//******************************* GUI ********************************//
-
-
-
-
-
+//******************************* GUI HANDLING ********************************//
 
 function Stiffness(ks) {
   stiffness = -ks;
@@ -629,10 +592,10 @@ function WindStrength(w) {
 function RenderMasses() {
   if (renderParticles == false){
     renderParticles = true;
-    button.style('background-color: green');
+    buttonDispMass.style('background-color: green');
 }else{
     renderParticles = false;
-    button.style('background-color: red');
+    buttonDispMass.style('background-color: red');
   }
 }
 
@@ -653,9 +616,9 @@ function Reset() {
   massSlider.value(7);
   dampingSlider.value(12);
   stiffnessSlider.value(700);
-  button.style('background-color: green');
+  buttonDispMass.style('background-color: green');
   RenderMasses = true;
-  button3.style('background-color: red');
+  buttonWind.style('background-color: red');
   windActive = false;
   settings();
 }
@@ -664,10 +627,10 @@ function toggle() {
 
   if(windActive == true){
     windActive = false;
-    button3.style('background-color: red');
+    buttonWind.style('background-color: red');
   }else{
     windActive =true;
-    button3.style('background-color: green')
+    buttonWind.style('background-color: green')
   }
 }
 
